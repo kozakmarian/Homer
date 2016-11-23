@@ -1,6 +1,6 @@
 package sk.upjs.paz1c.homer;
 
-class Item {
+public class Item {
     
     private Float amount;
     private Long commodity_id;
