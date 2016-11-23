@@ -12,12 +12,15 @@ import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+        
 /*
     Trieda zodpovedna za nahravanie instalaciu a aktivaciu modulov
 */
 public class ModuleManager {
     
+    private static final Logger logger = LoggerFactory.getLogger(ModuleManager.class);
     private static final String MODULES_PATH = "modules";
     private final List<ModuleEntry> availableModules = new ArrayList<>();
     private final List<Module> modules = new ArrayList<>();
@@ -31,7 +34,7 @@ public class ModuleManager {
             try {
                 this.load(module);
             } catch (IOException ex) {
-                System.err.println("Module at " + module.getPath() + " could not be loaded");
+                logger.error("Module at " + module.getPath() + " could not be loaded");
                 ex.printStackTrace();
             }
         }
@@ -56,8 +59,7 @@ public class ModuleManager {
             try {
                 c = cl.loadClass(className);
             } catch (ClassNotFoundException ex) {
-                System.err.println("Module class " + className + " could not be found - not loading");
-                ex.printStackTrace();
+                logger.error("Module class " + className + " could not be found - not loading", ex);
                 return;
             }
             if (c != null && c.getGenericSuperclass().equals(Module.class)) {
@@ -68,28 +70,27 @@ public class ModuleManager {
                 me.name = attributes.getValue("Specification-Title");
                 me.prefix = attributes.getValue("Specification-Vendor");
                 this.availableModules.add(me);
+
                 System.out.println("Loading...\n" + me);
                 Module m;
                 try {
                     m = (Module) c.getConstructor(void.class).newInstance();
                 } catch (NoSuchMethodException | IllegalAccessException nsme) {
-                    System.err.println("Module " + me.name + " does not implement constructor with required signature - not loading");
-                    nsme.printStackTrace();
+                    logger.error("Module " + me.name + " does not implement constructor with required signature - not loading", nsme);
                     continue;
                 } catch (InstantiationException | InvocationTargetException ie) {
-                    System.err.println("Module " + me.name + " cannot be instantiated - not loading");
-                    ie.printStackTrace();
+                    logger.error("Module " + me.name + " cannot be instantiated - not loading", ie);
                     continue;
                 }
                 if (m == null) {
-                    System.err.println("Module " + me.name + " could not be loaded");
+                    logger.error("Module " + me.name + " could not be loaded");
                     continue;
                 }
                 
                 if (!m.check())
                     if (m.install())
                         this.modules.add(m);
-                    else System.err.println("Module " + m.name + " failed to install");
+                    else logger.error("Module " + m.name + " failed to install");
             }
         }
     }
