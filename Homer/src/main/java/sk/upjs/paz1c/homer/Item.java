@@ -3,11 +3,32 @@ package sk.upjs.paz1c.homer;
 public class Item {
     
     private Float amount;
-    private Long commodity_id;
+    private Long product_id;
     private Long id;
+    private Long list_id;
     private Integer status;
     private String unit;
 
+    
+    /**
+     * Get the value of list_id
+     *
+     * @return the value of list_id
+     */
+    public Long getList_id() {
+        return list_id;
+    }
+
+    /**
+     * Set the value of list_id
+     *
+     * @param list_id new value of list_id
+     */
+    public void setList_id(Long list_id) {
+        this.list_id = list_id;
+    }
+
+    
     /**
      * Get the value of amount
      *
@@ -31,17 +52,17 @@ public class Item {
      *
      * @return the value of commodity_id
      */
-    public Long getCommodity_id() {
-        return commodity_id;
+    public Long getProduct_id() {
+        return product_id;
     }
 
     /**
      * Set the value of commodity_id
      *
-     * @param commodity_id new value of commodity_id
+     * @param product_id new value of commodity_id
      */
-    public void setCommodity_id(Long commodity_id) {
-        this.commodity_id = commodity_id;
+    public void setProduct_id(Long product_id) {
+        this.product_id = product_id;
     }
 
     /**

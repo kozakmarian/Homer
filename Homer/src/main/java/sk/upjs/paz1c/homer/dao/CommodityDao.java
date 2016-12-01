@@ -6,10 +6,10 @@ import sk.upjs.paz1c.homer.*;
  * @author dyske
  */
 public interface CommodityDao {
-    public List<Commodity>      list();
-    public Commodity            find(Long id);
-    public List<Commodity>      find(String name);
-    public List<Commodity>      find(Recipe recipe);
-    public void                 store(Commodity commodity);
-    public void                 delete(Commodity commodity);
+    public List<Product>      list();
+    public Product            find(Long id);
+    public List<Product>      find(String name);
+    public List<Product>      find(Recipe recipe);
+    public void                 store(Product commodity);
+    public void                 delete(Product commodity);
 }
