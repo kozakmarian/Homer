@@ -1,9 +1,9 @@
-package sk.upjs.paz1c.homer.dao;
+package sk.upjs.paz1c.homer.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
-import sk.upjs.paz1c.homer.Product;
+import sk.upjs.paz1c.homer.entity.Product;
 
 /**
  *
@@ -11,6 +11,13 @@ import sk.upjs.paz1c.homer.Product;
  */
 public class ProductRowMapper implements RowMapper<Product>{
 
+    /**
+     *
+     * @param rs
+     * @param i
+     * @return
+     * @throws SQLException
+     */
     @Override
     public Product mapRow(ResultSet rs, int i) throws SQLException {
         Product p = new Product();

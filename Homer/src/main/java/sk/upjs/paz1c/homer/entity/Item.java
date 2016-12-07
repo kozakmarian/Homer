@@ -1,6 +1,10 @@
-package sk.upjs.paz1c.homer;
+package sk.upjs.paz1c.homer.entity;
 
-public class Item {
+/**
+ *
+ * @author dyske
+ */
+public class Item extends Entity{
     
     private Float amount;
     private Long product_id;
@@ -52,7 +56,7 @@ public class Item {
      *
      * @return the value of commodity_id
      */
-    public Long getProduct_id() {
+    public Long getProductId() {
         return product_id;
     }
 

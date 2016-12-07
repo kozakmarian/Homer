@@ -1,6 +1,7 @@
 package sk.upjs.paz1c.homer;
 
 import com.alee.laf.WebLookAndFeel;
+import sk.upjs.paz1c.homer.dao.mysql.MysqlProductDao;
 
 /**
  *

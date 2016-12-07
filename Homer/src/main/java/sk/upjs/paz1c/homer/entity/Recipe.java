@@ -1,8 +1,8 @@
-package sk.upjs.paz1c.homer;
+package sk.upjs.paz1c.homer.entity;
 
 import java.util.List;
 
-public class Recipe {
+public class Recipe extends Entity {
     
     private Long id;
     private String name;
@@ -16,6 +16,7 @@ public class Recipe {
     private List<Item> ingredients;
     private String category;
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -80,6 +81,7 @@ public class Recipe {
         this.url = url;
     }
 
+    @Override
     public Integer getStatus() {
         return status;
     }
@@ -102,7 +104,5 @@ public class Recipe {
 
     public void setCategory(String category) {
         this.category = category;
-    }
-    
-    
+    }    
 }

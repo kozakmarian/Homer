@@ -1,5 +1,6 @@
 package sk.upjs.paz1c.homer;
 
+import sk.upjs.paz1c.homer.entity.Module;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -18,6 +19,12 @@ import org.slf4j.LoggerFactory;
 /*
     Trieda zodpovedna za nahravanie instalaciu a aktivaciu modulov
 */
+
+/**
+ *
+ * @author dyske
+ */
+
 public class ModuleManager {
     
     private static final Logger logger = LoggerFactory.getLogger(ModuleManager.class);
@@ -25,6 +32,10 @@ public class ModuleManager {
     private final List<ModuleEntry> availableModules = new ArrayList<>();
     private final List<Module> modules = new ArrayList<>();
     
+    /**
+     *
+     * @throws NotDirectoryException
+     */
     public void loadAll() throws NotDirectoryException {
         File moduleDirectory = new File(MODULES_PATH);
         if (!moduleDirectory.isDirectory())
@@ -90,7 +101,7 @@ public class ModuleManager {
                 if (!m.check())
                     if (m.install())
                         this.modules.add(m);
-                    else logger.error("Module " + m.name + " failed to install");
+                    else logger.error("Module " + m.getName() + " failed to install");
             }
         }
     }

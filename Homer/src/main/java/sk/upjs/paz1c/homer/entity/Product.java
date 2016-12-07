@@ -1,14 +1,17 @@
-package sk.upjs.paz1c.homer;
+package sk.upjs.paz1c.homer.entity;
 
-import java.util.Date;
-
-public class Product {
+/**
+ *
+ * @author dyske
+ */
+public class Product extends Entity {
     
     private Long id;
     private String name;
     private String image;
     private Integer status;
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -33,6 +36,7 @@ public class Product {
         this.image = image;
     }
 
+    @Override
     public Integer getStatus() {
         return status;
     }
@@ -40,7 +44,4 @@ public class Product {
     public void setStatus(Integer status) {
         this.status = status;
     }
-    
-    
-
 }
