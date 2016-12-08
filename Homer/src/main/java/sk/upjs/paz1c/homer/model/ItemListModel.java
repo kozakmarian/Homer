@@ -15,10 +15,10 @@ public class ItemListModel extends AbstractListModel<Item> {
 
     private ShoppingList shoppingList;
     private List<Item> items;
-    private ItemDao itemDao;
+    private final ItemDao itemDao;
 
     public ItemListModel(ShoppingList shoppingList) {
-        itemDao = ObjectFactory.INSTANCE.getItemDao();
+        itemDao = ObjectFactory.INSTANCE.getDao(Item.class);
 
     }
 

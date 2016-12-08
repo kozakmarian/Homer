@@ -1,13 +1,10 @@
 package sk.upjs.paz1c.homer;
 
 import com.alee.laf.WebLookAndFeel;
-import java.util.LinkedList;
-import java.util.List;
-import javax.swing.ListModel;
 import sk.upjs.paz1c.homer.dao.ItemDao;
 import sk.upjs.paz1c.homer.dao.ProductDao;
 import sk.upjs.paz1c.homer.dao.RecipeDao;
-import sk.upjs.paz1c.homer.dao.mysql.MysqlProductDao;
+import sk.upjs.paz1c.homer.entity.Item;
 import sk.upjs.paz1c.homer.entity.Product;
 import sk.upjs.paz1c.homer.entity.Recipe;
 import sk.upjs.paz1c.homer.entity.ShoppingList;
@@ -26,9 +23,9 @@ public class MainFrame extends javax.swing.JFrame {
      * Creates new form MainFrame
      */
     private ShoppingList shoppingList;
-    private RecipeDao recipeDao = ObjectFactory.INSTANCE.getRecipeDao();
-    private ItemDao itemDao = ObjectFactory.INSTANCE.getItemDao();
-    private ProductDao productDao = ObjectFactory.INSTANCE.getProductDao();
+    private RecipeDao recipeDao = ObjectFactory.INSTANCE.getDao(Recipe.class);
+    private ItemDao itemDao = ObjectFactory.INSTANCE.getDao(Item.class);
+    private ProductDao productDao = ObjectFactory.INSTANCE.getDao(Product.class);
 
     ;
     /**

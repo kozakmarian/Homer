@@ -22,7 +22,7 @@ import sk.upjs.paz1c.homer.entity.Entity;
  * this generalization.
  * 
  * @author dyske
- * @param <T>   This DAO (and all others) operate on Entities.
+ * @param <T>   Entity to operate with
  */
 public abstract class MysqlGenericDao<T extends Entity> implements GenericDao<T>{
     
@@ -57,7 +57,7 @@ public abstract class MysqlGenericDao<T extends Entity> implements GenericDao<T>
      * to superclass constructor, upon creation of subclass.
      */
     protected RowMapper<T> rowMapper;
-
+    
     /**
      * Can this constructor get any more generic?
      * 

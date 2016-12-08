@@ -6,9 +6,7 @@
 package sk.upjs.paz1c.homer;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.util.Date;
-import sk.upjs.paz1c.homer.model.ListComboBoxModel;
 import sk.upjs.paz1c.homer.dao.ShoppingListDao;
 import sk.upjs.paz1c.homer.entity.ShoppingList;
 
@@ -18,7 +16,7 @@ import sk.upjs.paz1c.homer.entity.ShoppingList;
  */
 public class ListDialog extends javax.swing.JDialog {
 
-    private ShoppingListDao shoppingListDao = ObjectFactory.INSTANCE.getShoppingListDao();
+    private ShoppingListDao shoppingListDao = ObjectFactory.INSTANCE.getDao(ShoppingList.class);
 
     /**
      * Creates new form createShoppingListDialog

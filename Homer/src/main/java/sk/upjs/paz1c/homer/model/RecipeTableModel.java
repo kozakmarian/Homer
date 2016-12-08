@@ -20,8 +20,8 @@ public class RecipeTableModel extends AbstractTableModel {
     private static final int COLUMN_INDEX_PORTIONS = 2;
     private static final int COLUMN_INDEX_STATUS = 3;
 
-    private RecipeDao recipeDao = ObjectFactory.INSTANCE.getRecipeDao();
-    private List<Recipe> recipes = new LinkedList<Recipe>();
+    private RecipeDao recipeDao = ObjectFactory.INSTANCE.getDao(Recipe.class);
+    private List<Recipe> recipes = new LinkedList<>();
 
     @Override
     public int getRowCount() {
