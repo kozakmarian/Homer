@@ -17,7 +17,7 @@ public class MysqlRecipeDao extends MysqlGenericDao<Recipe> implements RecipeDao
     /**
      * @see MysqlGenericDao#tableName
      */
-    protected String tableName = "recipe";
+    public static final String TABLE_NAME = "recipes";
 
     /**
      * @see MysqlGenericDao#storeMap
@@ -29,7 +29,7 @@ public class MysqlRecipeDao extends MysqlGenericDao<Recipe> implements RecipeDao
      * @param jdbcTemplate
      */
     public MysqlRecipeDao(JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate, new RecipeRowMapper());
+        super(jdbcTemplate, new RecipeRowMapper(), TABLE_NAME);
     }
 
     /**
@@ -57,6 +57,6 @@ public class MysqlRecipeDao extends MysqlGenericDao<Recipe> implements RecipeDao
      */
     @Override
     public List<Recipe> find(String name) {
-        return jdbcTemplate.query("SELECT * FROM " + tableName + " WHERE name = " + name, rowMapper);
+        return jdbcTemplate.query("SELECT * FROM " + TABLE_NAME + " WHERE name = " + name, rowMapper);
     }    
 }

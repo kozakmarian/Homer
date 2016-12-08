@@ -20,12 +20,12 @@ public class MysqlItemDao extends MysqlGenericDao<Item> implements ItemDao {
     /**
      * @see MysqlGenericDao#tableName
      */
-    protected String tableName = "items";
+    public static final String TABLE_NAME = "items";
 
     /**
      * @see MysqlGenericDao#storeMap
      */
-    protected Map<String, Object> storeMap = new HashMap<>();
+    public static final Map<String, Object> STORE_MAP = new HashMap<>();
     
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -38,7 +38,7 @@ public class MysqlItemDao extends MysqlGenericDao<Item> implements ItemDao {
      * @param jdbcTemplate
      */
     public MysqlItemDao(JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate, new ItemRowMapper());
+        super(jdbcTemplate, new ItemRowMapper(), TABLE_NAME);
     }
 
     /**
@@ -47,12 +47,12 @@ public class MysqlItemDao extends MysqlGenericDao<Item> implements ItemDao {
      */
     @Override
     public void store(Item item) {
-        storeMap.put("id", item.getId());
-        storeMap.put("list_id", item.getList_id());
-        storeMap.put("product_id", item.getProductId());
-        storeMap.put("amount", item.getAmount());
-        storeMap.put("unit", item.getUnit());
-        storeMap.put("status", item.getStatus());
+        STORE_MAP.put("id", item.getId());
+        STORE_MAP.put("list_id", item.getList_id());
+        STORE_MAP.put("product_id", item.getProductId());
+        STORE_MAP.put("amount", item.getAmount());
+        STORE_MAP.put("unit", item.getUnit());
+        STORE_MAP.put("status", item.getStatus());
         super.store(item);
     }
 
@@ -62,7 +62,7 @@ public class MysqlItemDao extends MysqlGenericDao<Item> implements ItemDao {
      */
     @Override
     public void done(Item item) {
-        jdbcTemplate.update("UPDATE " + tableName + " SET status = ? WHERE id = ?", Status.DONE, item.getId());
+        jdbcTemplate.update("UPDATE " + TABLE_NAME + " SET status = ? WHERE id = ?", Status.DONE, item.getId());
     }
 
     /**

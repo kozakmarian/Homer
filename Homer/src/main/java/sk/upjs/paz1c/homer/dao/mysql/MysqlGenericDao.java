@@ -64,11 +64,13 @@ public abstract class MysqlGenericDao<T extends Entity> implements GenericDao<T>
      * @param jdbcTemplate  Usually created by {@link sk.upjs.paz1c.homer.ObjectFactory}
      * @param rowMapper     Entity-specific mapper passed by subclass in its
      *                      constructor
+     * @param tableName     Name of table containing given entities
      */
-    public MysqlGenericDao(JdbcTemplate jdbcTemplate, RowMapper<T> rowMapper) {
+    public MysqlGenericDao(JdbcTemplate jdbcTemplate, RowMapper<T> rowMapper, String tableName) {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(this.jdbcTemplate);
         this.rowMapper = rowMapper;
+        this.tableName = tableName;
     }
     
     private void performMemberChecks() {
@@ -121,8 +123,7 @@ public abstract class MysqlGenericDao<T extends Entity> implements GenericDao<T>
                     .stream()
                     .map(s -> s + " = :" + s)
                     .collect(Collectors.joining(", "));
-            namedParameterJdbcTemplate.update(
-                    "UPDATE " + tableName + " SET " + fields +
+            namedParameterJdbcTemplate.update("UPDATE " + tableName + " SET " + fields +
                         " WHERE id = " + entity.getId(),
                     storeMap
             );
@@ -132,8 +133,7 @@ public abstract class MysqlGenericDao<T extends Entity> implements GenericDao<T>
                     .map(s -> ":" + s)
                     .collect(Collectors.joining(", "));
             KeyHolder keyHolder = new GeneratedKeyHolder();
-            namedParameterJdbcTemplate.update(
-                    "INSERT INTO " + tableName + " VALUES(" + fields + ")",
+            namedParameterJdbcTemplate.update("INSERT INTO " + tableName + " VALUES(" + fields + ")",
                     new MapSqlParameterSource(storeMap),
                     keyHolder
             );

@@ -18,7 +18,7 @@ public class MysqlShoppingListDao extends MysqlGenericDao<ShoppingList> implemen
     /**
      * @see MysqlGenericDao#tableName
      */
-    protected String tableName = "shoppingLists";
+    public static final String TABLE_NAME = "shoppingLists";
 
     /**
      * @see MysqlGenericDao#storeMap
@@ -30,7 +30,7 @@ public class MysqlShoppingListDao extends MysqlGenericDao<ShoppingList> implemen
      * @param jdbcTemplate
      */
     public MysqlShoppingListDao(JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate, new ShoppingListRowMapper());
+        super(jdbcTemplate, new ShoppingListRowMapper(), TABLE_NAME);
     }
 
     /**
@@ -54,7 +54,7 @@ public class MysqlShoppingListDao extends MysqlGenericDao<ShoppingList> implemen
     @Override
     public List<ShoppingList> findAll(Item item) {
         Object[] params = {item.getId()};
-        return jdbcTemplate.query("SELECT * FROM " + tableName + " WHERE item_id = ?", params, rowMapper);
+        return jdbcTemplate.query("SELECT * FROM " + TABLE_NAME + " WHERE item_id = ?", params, rowMapper);
     }
     
 }

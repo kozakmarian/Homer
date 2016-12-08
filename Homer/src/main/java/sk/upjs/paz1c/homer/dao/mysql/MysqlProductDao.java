@@ -18,7 +18,7 @@ public class MysqlProductDao extends MysqlGenericDao<Product> implements Product
     /**
      * @see MysqlGenericDao#tableName
      */
-    protected String tableName = "products";
+    public static final String TABLE_NAME = "products";
 
     /**
      * @see MysqlGenericDao#storeMap
@@ -30,7 +30,7 @@ public class MysqlProductDao extends MysqlGenericDao<Product> implements Product
      * @param jdbcTemplate
      */
     public MysqlProductDao(JdbcTemplate jdbcTemplate) {
-        super(jdbcTemplate, new ProductRowMapper());
+        super(jdbcTemplate, new ProductRowMapper(), TABLE_NAME);
     }
     
     /**
@@ -39,7 +39,7 @@ public class MysqlProductDao extends MysqlGenericDao<Product> implements Product
      * @return
      */
     public List<Product> find(String name) {
-        return jdbcTemplate.query("SELECT * FROM " + tableName + " WHERE name = " + name, rowMapper);
+        return jdbcTemplate.query("SELECT * FROM " + TABLE_NAME + " WHERE name = " + name, rowMapper);
     }
 
     /**

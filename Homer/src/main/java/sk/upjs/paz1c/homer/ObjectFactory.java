@@ -22,7 +22,7 @@ public enum ObjectFactory {
 
     public ProductDao getProductDao() {
         if (this.commodityDao == null) {
-            this.commodityDao = new MysqlProductDao(jdbcTemplate);
+            this.commodityDao = new MysqlProductDao(getJdbcTemplate());
 
         }
 
@@ -31,31 +31,31 @@ public enum ObjectFactory {
 
     public ItemDao getItemDao() {
         if (this.itemDao == null) {
-            this.itemDao = new MysqlItemDao(jdbcTemplate);
+            this.itemDao = new MysqlItemDao(getJdbcTemplate());
         }
         return this.itemDao;
     }
 
     public RecipeDao getRecipeDao() {
         if (this.recipeDao == null) {
-            this.recipeDao = new MysqlRecipeDao(jdbcTemplate);
+            this.recipeDao = new MysqlRecipeDao(getJdbcTemplate());
         }
         return this.recipeDao;
     }
 
     public ShoppingListDao getShoppingListDao() {
         if (this.shoppingListDao == null) {
-            this.shoppingListDao = new MysqlShoppingListDao(jdbcTemplate);
+            this.shoppingListDao = new MysqlShoppingListDao(getJdbcTemplate());
         }
         return this.shoppingListDao;
     }
 
     public JdbcTemplate getJdbcTemplate() {
         //to do
-        MysqlDataSource dataSource = new MysqlDataSource() {
-        };
-        //dataSource.setUrl("cffw.ddns.net");
+        MysqlDataSource dataSource = new MysqlDataSource();
+        dataSource.setUrl("jdbc:mysql://cfftw.ddns.net/homer");
         dataSource.setUser("homer");
+        dataSource.setPort(3306);
         dataSource.setPassword("plate-watch-window");
         jdbcTemplate = new JdbcTemplate(dataSource);
         return this.jdbcTemplate;
