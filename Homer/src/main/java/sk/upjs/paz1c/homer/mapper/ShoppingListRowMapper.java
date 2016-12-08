@@ -9,7 +9,7 @@ import sk.upjs.paz1c.homer.entity.ShoppingList;
  *
  * @author dyske
  */
-public class ShoppingListRowMapper implements RowMapper<ShoppingList>{
+public class ShoppingListRowMapper implements RowMapper<ShoppingList> {
 
     /**
      *
@@ -20,6 +20,11 @@ public class ShoppingListRowMapper implements RowMapper<ShoppingList>{
      */
     @Override
     public ShoppingList mapRow(ResultSet rs, int i) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }    
+        ShoppingList shoppingList = new ShoppingList();
+        shoppingList.setDateCreated(rs.getDate("date_created"));
+        shoppingList.setId(rs.getLong("id"));
+        shoppingList.setName(rs.getString("name"));
+        shoppingList.setStatus(rs.getInt("status"));
+        return shoppingList;
+    }
 }

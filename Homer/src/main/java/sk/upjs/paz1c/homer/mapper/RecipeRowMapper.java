@@ -9,8 +9,8 @@ import sk.upjs.paz1c.homer.entity.Recipe;
  *
  * @author dyske
  */
-public class RecipeRowMapper implements RowMapper<Recipe>{
-    
+public class RecipeRowMapper implements RowMapper<Recipe> {
+
     /**
      *
      * @param rs
@@ -20,6 +20,19 @@ public class RecipeRowMapper implements RowMapper<Recipe>{
      */
     @Override
     public Recipe mapRow(ResultSet rs, int i) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Recipe recipe = new Recipe();
+        recipe.setId(rs.getLong("id"));
+        recipe.setName(rs.getString("name"));
+        recipe.setPreparation(rs.getInt("preparation"));
+        recipe.setCooking(rs.getInt("cooking"));
+        recipe.setPortions(rs.getInt("portions"));
+        recipe.setImage(rs.getString("image"));
+        recipe.setInstructions(rs.getString("instructions"));
+        recipe.setUrl(rs.getString("url"));
+        recipe.setStatus(rs.getInt("status"));
+
+        recipe.setCategory(rs.getString("category"));
+
+        return recipe;
     }
 }

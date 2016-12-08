@@ -5,6 +5,7 @@ import sk.upjs.paz1c.homer.mapper.ItemRowMapper;
 import java.util.List;
 import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import sk.upjs.paz1c.homer.Status;
 import sk.upjs.paz1c.homer.dao.ItemDao;
 import sk.upjs.paz1c.homer.entity.Item;
@@ -25,6 +26,12 @@ public class MysqlItemDao extends MysqlGenericDao<Item> implements ItemDao {
      * @see MysqlGenericDao#storeMap
      */
     protected Map<String, Object> storeMap = new HashMap<>();
+    
+    private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+    private ItemRowMapper itemRowMapper = new ItemRowMapper();
+
+   
     
     /**
      * @see MysqlGenericDao

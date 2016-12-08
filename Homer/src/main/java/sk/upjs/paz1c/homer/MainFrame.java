@@ -1,7 +1,20 @@
 package sk.upjs.paz1c.homer;
 
 import com.alee.laf.WebLookAndFeel;
+import java.util.LinkedList;
+import java.util.List;
+import javax.swing.ListModel;
+import sk.upjs.paz1c.homer.dao.ItemDao;
+import sk.upjs.paz1c.homer.dao.ProductDao;
+import sk.upjs.paz1c.homer.dao.RecipeDao;
 import sk.upjs.paz1c.homer.dao.mysql.MysqlProductDao;
+import sk.upjs.paz1c.homer.entity.Product;
+import sk.upjs.paz1c.homer.entity.Recipe;
+import sk.upjs.paz1c.homer.entity.ShoppingList;
+import sk.upjs.paz1c.homer.model.ItemListModel;
+import sk.upjs.paz1c.homer.model.ListComboBoxModel;
+import sk.upjs.paz1c.homer.model.ProductComboBoxModel;
+import sk.upjs.paz1c.homer.model.RecipeTableModel;
 
 /**
  *
@@ -12,8 +25,24 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * Creates new form MainFrame
      */
+    private ShoppingList shoppingList;
+    private RecipeDao recipeDao = ObjectFactory.INSTANCE.getRecipeDao();
+    private ItemDao itemDao = ObjectFactory.INSTANCE.getItemDao();
+    private ProductDao productDao = ObjectFactory.INSTANCE.getProductDao();
+
+    ;
+    /**
+     * Creates new form MainFrame
+     */
     public MainFrame() {
         initComponents();
+
+        refreshRecipes();
+    }
+
+    private void refreshRecipes() {
+        RecipeTableModel model = (RecipeTableModel) recipeTable.getModel();
+        model.refresh();
     }
 
     /**
@@ -26,12 +55,15 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         tabbedPane = new javax.swing.JTabbedPane();
-        recipePanel = new javax.swing.JPanel();
-        searchField = new javax.swing.JTextField();
-        recipeScrollPane = new javax.swing.JScrollPane();
-        recipeTable = new javax.swing.JTable();
-        searchButton = new javax.swing.JButton();
         procuctPanel = new javax.swing.JPanel();
+        productComboBox = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        addButton = new javax.swing.JButton();
+        chooseListComboBox = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        productScrollPane = new javax.swing.JScrollPane();
+        jSpinner1 = new javax.swing.JSpinner();
+        jLabel4 = new javax.swing.JLabel();
         listsPanel = new javax.swing.JPanel();
         listComboBox = new javax.swing.JComboBox<>();
         listNameLabel = new javax.swing.JLabel();
@@ -41,7 +73,7 @@ public class MainFrame extends javax.swing.JFrame {
         listStatusLabel = new javax.swing.JLabel();
         finishedCheckBox = new javax.swing.JCheckBox();
         listScrollPane = new javax.swing.JScrollPane();
-        itemList = new javax.swing.JList<>();
+        itemList = new javax.swing.JList();
         listAddButton = new javax.swing.JButton();
         listEditButton = new javax.swing.JButton();
         listPurchasedButton = new javax.swing.JButton();
@@ -57,6 +89,13 @@ public class MainFrame extends javax.swing.JFrame {
         portionsCountLabel = new javax.swing.JLabel();
         detailScrollPane = new javax.swing.JScrollPane();
         instructionsTextPane = new javax.swing.JTextPane();
+        buyButton = new javax.swing.JButton();
+        recipePanel = new javax.swing.JPanel();
+        searchField = new javax.swing.JTextField();
+        recipeScrollPane = new javax.swing.JScrollPane();
+        recipeTable = new javax.swing.JTable();
+        searchButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         editMenu = new javax.swing.JMenu();
@@ -67,66 +106,82 @@ public class MainFrame extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(500, 350));
         setPreferredSize(new java.awt.Dimension(600, 400));
 
+        tabbedPane.setBackground(new java.awt.Color(255, 153, 0));
         tabbedPane.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         tabbedPane.setMinimumSize(new java.awt.Dimension(143, 200));
 
-        recipeTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+        productComboBox.setModel(new ProductComboBoxModel());
+
+        jLabel2.setText("Vybrať produkt:");
+
+        addButton.setText("Pridat do zoznamu...");
+
+        chooseListComboBox.setModel(new ListComboBoxModel());
+        chooseListComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chooseListComboBoxActionPerformed(evt);
             }
-        ));
-        recipeScrollPane.setViewportView(recipeTable);
+        });
 
-        searchButton.setText("Hľadať");
+        jLabel3.setText("Vybrať zoznam:");
 
-        javax.swing.GroupLayout recipePanelLayout = new javax.swing.GroupLayout(recipePanel);
-        recipePanel.setLayout(recipePanelLayout);
-        recipePanelLayout.setHorizontalGroup(
-            recipePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(recipePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(recipePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(recipeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                    .addGroup(recipePanelLayout.createSequentialGroup()
-                        .addComponent(searchField)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchButton)))
-                .addContainerGap())
-        );
-        recipePanelLayout.setVerticalGroup(
-            recipePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(recipePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(recipePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(searchButton)
-                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(recipeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        tabbedPane.addTab("Recepty", recipePanel);
+        jLabel4.setText("Množstvo:");
 
         javax.swing.GroupLayout procuctPanelLayout = new javax.swing.GroupLayout(procuctPanel);
         procuctPanel.setLayout(procuctPanelLayout);
         procuctPanelLayout.setHorizontalGroup(
             procuctPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 412, Short.MAX_VALUE)
+            .addGroup(procuctPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(procuctPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(procuctPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(productComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
+                        .addComponent(jLabel3)
+                        .addGap(36, 36, 36)
+                        .addComponent(chooseListComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(53, 53, 53))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, procuctPanelLayout.createSequentialGroup()
+                        .addGroup(procuctPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(procuctPanelLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel4)
+                                .addGap(18, 18, 18)
+                                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(addButton))
+                            .addComponent(productScrollPane))
+                        .addGap(41, 41, 41))))
         );
         procuctPanelLayout.setVerticalGroup(
             procuctPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 308, Short.MAX_VALUE)
+            .addGroup(procuctPanelLayout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addGroup(procuctPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(productComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(chooseListComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(18, 18, 18)
+                .addComponent(productScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(procuctPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addButton)
+                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(19, 19, 19))
         );
 
         tabbedPane.addTab("Produkty", procuctPanel);
 
-        listComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        listComboBox.setModel(new ListComboBoxModel());
+        listComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listComboBoxActionPerformed(evt);
+            }
+        });
 
         listNameLabel.setText("Názov");
 
@@ -138,11 +193,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         finishedCheckBox.setText("Zoznam je úplný");
 
-        itemList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+        itemList.setModel(new ItemListModel(shoppingList));
         listScrollPane.setViewportView(itemList);
 
         listAddButton.setText("Pridať...");
@@ -167,17 +218,14 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(listsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(listsPanelLayout.createSequentialGroup()
                         .addComponent(listScrollPane)
-                        .addGroup(listsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(listsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(listsPanelLayout.createSequentialGroup()
-                                    .addGap(24, 24, 24)
-                                    .addComponent(listAddButton))
-                                .addComponent(listEditButton, javax.swing.GroupLayout.Alignment.TRAILING))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, listsPanelLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(listsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(listPurchasedButton, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(listRemoveButton, javax.swing.GroupLayout.Alignment.TRAILING)))))
+                        .addGap(16, 16, 16)
+                        .addGroup(listsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(listsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(listEditButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(listAddButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(listsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(listPurchasedButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(listRemoveButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addComponent(listComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(listsPanelLayout.createSequentialGroup()
                         .addGroup(listsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -191,7 +239,7 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addComponent(finishedCheckBox)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(listsPanelLayout.createSequentialGroup()
-                                .addComponent(listNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE)
+                                .addComponent(listNameField, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(listDateLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -216,7 +264,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(finishedCheckBox))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(listsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(listScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 201, Short.MAX_VALUE)
+                    .addComponent(listScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                     .addGroup(listsPanelLayout.createSequentialGroup()
                         .addComponent(listAddButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -249,18 +297,24 @@ public class MainFrame extends javax.swing.JFrame {
         instructionsTextPane.setEditable(false);
         detailScrollPane.setViewportView(instructionsTextPane);
 
+        buyButton.setText("Zapísať do zoznamu...");
+        buyButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buyButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout detailPanelLayout = new javax.swing.GroupLayout(detailPanel);
         detailPanel.setLayout(detailPanelLayout);
         detailPanelLayout.setHorizontalGroup(
             detailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(detailPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(detailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(recipeNameLabel)
+                .addGroup(detailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(detailPanelLayout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(detailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(detailScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 394, Short.MAX_VALUE)
+                            .addComponent(detailScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
                             .addGroup(detailPanelLayout.createSequentialGroup()
                                 .addComponent(preparationLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -272,15 +326,24 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(portionsLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(portionsCountLabel)))))
+                                .addComponent(portionsCountLabel))))
+                    .addGroup(detailPanelLayout.createSequentialGroup()
+                        .addComponent(recipeNameLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(buyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         detailPanelLayout.setVerticalGroup(
             detailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(detailPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(recipeNameLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(detailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(detailPanelLayout.createSequentialGroup()
+                        .addComponent(recipeNameLabel)
+                        .addGap(7, 7, 7))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, detailPanelLayout.createSequentialGroup()
+                        .addComponent(buyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addGroup(detailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(preparationLabel)
                     .addComponent(preparationDurationLabel)
@@ -289,11 +352,54 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(portionsLabel)
                     .addComponent(portionsCountLabel))
                 .addGap(18, 18, 18)
-                .addComponent(detailScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                .addComponent(detailScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         tabbedPane.addTab("Detail", detailPanel);
+
+        recipeTable.setModel(new RecipeTableModel());
+        recipeScrollPane.setViewportView(recipeTable);
+
+        searchButton.setText("OK");
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Vyhľadať v receptoch:");
+
+        javax.swing.GroupLayout recipePanelLayout = new javax.swing.GroupLayout(recipePanel);
+        recipePanel.setLayout(recipePanelLayout);
+        recipePanelLayout.setHorizontalGroup(
+            recipePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(recipePanelLayout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addGroup(recipePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(recipeScrollPane)
+                    .addGroup(recipePanelLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(18, 18, 18)
+                        .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(searchButton, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        recipePanelLayout.setVerticalGroup(
+            recipePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(recipePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(recipePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(searchButton))
+                .addGap(18, 18, 18)
+                .addComponent(recipeScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
+        );
+
+        tabbedPane.addTab("Recepty", recipePanel);
 
         fileMenu.setText("File");
         menuBar.add(fileMenu);
@@ -307,10 +413,9 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -323,9 +428,58 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public ShoppingList addSelectedList() {
+        ShoppingList selectedList = (ShoppingList) listComboBox.getSelectedItem();
+        return selectedList;
+    }
+
+    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+
+    }
+
+    private void listNameFieldActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
+        searchField.setText(shoppingList.getName());
+    }
+
+    private void listAddButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+        ListDialog listDialog = new ListDialog(this, true);
+        listDialog.setVisible(true);
+        //???
+        ((ListComboBoxModel) listComboBox.getModel()).refresh();
+
+    }
+
+
     private void listEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listEditButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_listEditButtonActionPerformed
+
+    private void buyButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buyButtonActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_buyButtonActionPerformed
+
+    private void listComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listComboBoxActionPerformed
+        // TODO add your handling code here:
+        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
+        ItemListModel model = (ItemListModel) itemList.getModel();
+        model.refresh(shoppingList);
+
+
+    }//GEN-LAST:event_listComboBoxActionPerformed
+
+    private void chooseListComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseListComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chooseListComboBoxActionPerformed
+
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_searchButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -343,6 +497,9 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addButton;
+    private javax.swing.JButton buyButton;
+    private javax.swing.JComboBox<ShoppingList> chooseListComboBox;
     private javax.swing.JLabel cookingDurationLabel;
     private javax.swing.JLabel cookingLabel;
     private javax.swing.JPanel detailPanel;
@@ -351,9 +508,14 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JCheckBox finishedCheckBox;
     private javax.swing.JTextPane instructionsTextPane;
-    private javax.swing.JList<String> itemList;
+    private javax.swing.JList itemList;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JButton listAddButton;
-    private javax.swing.JComboBox<String> listComboBox;
+    private javax.swing.JComboBox<ShoppingList> listComboBox;
     private javax.swing.JLabel listDateLabel;
     private javax.swing.JButton listEditButton;
     private javax.swing.JTextField listNameField;
@@ -369,6 +531,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel preparationDurationLabel;
     private javax.swing.JLabel preparationLabel;
     private javax.swing.JPanel procuctPanel;
+    private javax.swing.JComboBox<Product> productComboBox;
+    private javax.swing.JScrollPane productScrollPane;
     private javax.swing.JCheckBox purchasedCheckBox;
     private javax.swing.JLabel recipeNameLabel;
     private javax.swing.JPanel recipePanel;

@@ -20,7 +20,15 @@ public class ItemRowMapper implements RowMapper<Item> {
      */
     @Override
     public Item mapRow(ResultSet rs, int i) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Item item = new Item();
+        item.setAmount(rs.getFloat("amount"));
+        item.setProduct_id(rs.getLong("product_id"));
+        item.setId(rs.getLong("id"));
+        item.setList_id(rs.getLong("list_id"));
+        item.setStatus(rs.getInt("status"));
+        item.setUnit(rs.getString("unit"));
+
+        return item;
     }
-    
+
 }
