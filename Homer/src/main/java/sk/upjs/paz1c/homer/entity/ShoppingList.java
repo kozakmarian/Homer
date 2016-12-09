@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ShoppingList extends Entity {
     
-    private Date dateCreated;
+    private Date expiry;
     private Long id;
     private List<Item> list;
     private String name;
@@ -14,13 +14,13 @@ public class ShoppingList extends Entity {
 
 
     
-    public Date getDateCreated() {
-        return dateCreated;
+    public Date getExpiry() {
+        return expiry;
     }
 
     
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setExpiry(Date expiry) {
+        this.expiry = expiry;
     }
     
     @Override

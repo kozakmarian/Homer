@@ -18,6 +18,8 @@ public abstract class Entity implements StorableEntity {
      * @see sk.upjs.paz1c.homer.Status
      */
     protected Integer status;
+    
+    protected String name;
 
     /**
      * {@inheritDoc}
@@ -28,6 +30,10 @@ public abstract class Entity implements StorableEntity {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
     /**
      * {@inheritDoc}
      * @param status
@@ -35,5 +41,12 @@ public abstract class Entity implements StorableEntity {
     @Override
     public void setStatus(Integer status) {
         this.status = status;
+    }
+    
+    @Override
+    public String toString(){
+        if (this.getName()!=null)
+            return this.getName();
+        else return "???";
     }
 }

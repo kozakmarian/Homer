@@ -21,9 +21,9 @@ public class ShoppingListRowMapper implements RowMapper<ShoppingList> {
     @Override
     public ShoppingList mapRow(ResultSet rs, int i) throws SQLException {
         ShoppingList shoppingList = new ShoppingList();
-        shoppingList.setDateCreated(rs.getDate("date_created"));
         shoppingList.setId(rs.getLong("id"));
         shoppingList.setName(rs.getString("name"));
+        shoppingList.setExpiry(rs.getDate("expiry"));
         shoppingList.setStatus(rs.getInt("status"));
         return shoppingList;
     }

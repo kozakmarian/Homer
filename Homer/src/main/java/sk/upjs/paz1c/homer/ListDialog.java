@@ -85,7 +85,7 @@ public class ListDialog extends javax.swing.JDialog {
         shoppingList.setName(listTextField.getText());
         Timestamp stamp = new Timestamp(System.currentTimeMillis());
         Date date = new Date(stamp.getTime());
-        shoppingList.setDateCreated(date);
+        shoppingList.setExpiry(date);
         shoppingListDao.store(shoppingList);
 
         this.dispose();

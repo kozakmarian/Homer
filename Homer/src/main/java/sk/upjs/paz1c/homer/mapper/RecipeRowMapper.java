@@ -31,7 +31,7 @@ public class RecipeRowMapper implements RowMapper<Recipe> {
         recipe.setUrl(rs.getString("url"));
         recipe.setStatus(rs.getInt("status"));
 
-        recipe.setCategory(rs.getString("category"));
+        //recipe.setCategory(rs.getString("category"));
 
         return recipe;
     }

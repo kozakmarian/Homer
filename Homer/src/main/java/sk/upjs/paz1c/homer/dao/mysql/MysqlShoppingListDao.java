@@ -41,7 +41,7 @@ public class MysqlShoppingListDao extends MysqlGenericDao<ShoppingList> implemen
     public void store(ShoppingList shoppingList) {
         storeMap.put("id", shoppingList.getId());
         storeMap.put("name", shoppingList.getName());
-        storeMap.put("date_created", shoppingList.getDateCreated());
+        storeMap.put("expiry", shoppingList.getExpiry());
         storeMap.put("status", shoppingList.getStatus());
         super.store(shoppingList);
     }
