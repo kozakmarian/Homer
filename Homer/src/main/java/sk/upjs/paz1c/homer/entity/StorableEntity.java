@@ -1,5 +1,7 @@
 package sk.upjs.paz1c.homer.entity;
 
+import sk.upjs.paz1c.homer.Status;
+
 
 public interface StorableEntity {
 
@@ -9,9 +11,9 @@ public interface StorableEntity {
         return 0L;
     }
 
-    public void setStatus(Integer status);
+    public void setStatus(Status status);
     
-    default Integer getStatus() {
-        return -1;
+    default Status getStatus() {
+        return Status.INVALID;
     }
 }

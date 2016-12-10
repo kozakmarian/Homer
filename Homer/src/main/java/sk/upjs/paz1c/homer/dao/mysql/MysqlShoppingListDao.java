@@ -1,9 +1,7 @@
 package sk.upjs.paz1c.homer.dao.mysql;
 
-import java.util.HashMap;
 import sk.upjs.paz1c.homer.mapper.ShoppingListRowMapper;
 import java.util.List;
-import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import sk.upjs.paz1c.homer.dao.ShoppingListDao;
 import sk.upjs.paz1c.homer.entity.Item;
@@ -21,11 +19,6 @@ public class MysqlShoppingListDao extends MysqlGenericDao<ShoppingList> implemen
     public static final String TABLE_NAME = "shoppingLists";
 
     /**
-     * @see MysqlGenericDao#storeMap
-     */
-    protected Map<String, Object> storeMap = new HashMap<>();
-    
-    /**
      * @see MysqlGenericDao#this
      * @param jdbcTemplate
      */
@@ -42,7 +35,7 @@ public class MysqlShoppingListDao extends MysqlGenericDao<ShoppingList> implemen
         storeMap.put("id", shoppingList.getId());
         storeMap.put("name", shoppingList.getName());
         storeMap.put("expiry", shoppingList.getExpiry());
-        storeMap.put("status", shoppingList.getStatus());
+        storeMap.put("status", shoppingList.getStatus().toInt());
         super.store(shoppingList);
     }
 

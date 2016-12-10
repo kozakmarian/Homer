@@ -1,7 +1,7 @@
 package sk.upjs.paz1c.homer.dao.mysql;
 
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -38,7 +38,7 @@ public abstract class MysqlGenericDao<T extends Entity> implements GenericDao<T>
      * is thrown. Be cautious as it will *not* check whether the fields in map
      * correlate with columns in table.
      */
-    protected Map<String, Object> storeMap;
+    protected LinkedHashMap<String, Object> storeMap;
     
     /**
      * Yeah. We're using Spring JDBC. It is passed to DAO upon instantiation.
@@ -69,6 +69,7 @@ public abstract class MysqlGenericDao<T extends Entity> implements GenericDao<T>
     public MysqlGenericDao(JdbcTemplate jdbcTemplate, RowMapper<T> rowMapper, String tableName) {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(this.jdbcTemplate);
+        this.storeMap = new LinkedHashMap<>();
         this.rowMapper = rowMapper;
         this.tableName = tableName;
     }
@@ -118,20 +119,21 @@ public abstract class MysqlGenericDao<T extends Entity> implements GenericDao<T>
     @Override
     public void store(T entity) {
         this.performMemberChecks();
-        if (entity.getId() != 0) {
+        Long eid = entity.getId();
+        if (eid != null && eid != 0) {
             String fields = storeMap.keySet()
                     .stream()
                     .map(s -> s + " = :" + s)
-                    .collect(Collectors.joining(", "));
+                    .collect(Collectors.joining(", ")
+            );
             namedParameterJdbcTemplate.update("UPDATE " + tableName + " SET " + fields +
                         " WHERE id = " + entity.getId(),
                     storeMap
             );
         } else {
-            String fields = storeMap.keySet()
+            String fields = this.storeMap.keySet()
                     .stream()
-                    .map(s -> ":" + s)
-                    .collect(Collectors.joining(", "));
+                    .collect(Collectors.joining(", :", ":", ""));
             KeyHolder keyHolder = new GeneratedKeyHolder();
             namedParameterJdbcTemplate.update("INSERT INTO " + tableName + " VALUES(" + fields + ")",
                     new MapSqlParameterSource(storeMap),

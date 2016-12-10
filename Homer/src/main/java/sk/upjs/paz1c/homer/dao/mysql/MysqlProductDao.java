@@ -1,9 +1,7 @@
 package sk.upjs.paz1c.homer.dao.mysql;
 
-import java.util.HashMap;
 import sk.upjs.paz1c.homer.mapper.ProductRowMapper;
 import java.util.List;
-import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import sk.upjs.paz1c.homer.dao.ProductDao;
 import sk.upjs.paz1c.homer.entity.Product;
@@ -19,11 +17,6 @@ public class MysqlProductDao extends MysqlGenericDao<Product> implements Product
      * @see MysqlGenericDao#tableName
      */
     public static final String TABLE_NAME = "products";
-
-    /**
-     * @see MysqlGenericDao#storeMap
-     */
-    protected Map<String, Object> storeMap = new HashMap<>();
 
     /**
      * @see MysqlGenericDao#this
@@ -51,7 +44,7 @@ public class MysqlProductDao extends MysqlGenericDao<Product> implements Product
         storeMap.put("id", product.getId());
         storeMap.put("name", product.getName());
         storeMap.put("image", product.getImage());
-        storeMap.put("status", product.getStatus());
+        storeMap.put("status", product.getStatus().toInt());
         super.store(product);
     }
 

@@ -1,9 +1,7 @@
 package sk.upjs.paz1c.homer.dao.mysql;
 
-import java.util.HashMap;
 import sk.upjs.paz1c.homer.mapper.RecipeRowMapper;
 import java.util.List;
-import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import sk.upjs.paz1c.homer.dao.RecipeDao;
 import sk.upjs.paz1c.homer.entity.Recipe;
@@ -19,11 +17,6 @@ public class MysqlRecipeDao extends MysqlGenericDao<Recipe> implements RecipeDao
      */
     public static final String TABLE_NAME = "recipes";
 
-    /**
-     * @see MysqlGenericDao#storeMap
-     */
-    protected Map<String, Object> storeMap = new HashMap<>();
-    
     /**
      * @see MysqlGenericDao#this
      * @param jdbcTemplate
@@ -46,7 +39,7 @@ public class MysqlRecipeDao extends MysqlGenericDao<Recipe> implements RecipeDao
         storeMap.put("image", recipe.getImage());
         storeMap.put("instructions", recipe.getInstructions());
         storeMap.put("url", recipe.getUrl());
-        storeMap.put("status", recipe.getStatus());
+        storeMap.put("status", recipe.getStatus().toInt());
         super.store(recipe);
     }
 

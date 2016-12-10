@@ -1,9 +1,7 @@
 package sk.upjs.paz1c.homer.dao.mysql;
 
-import java.util.HashMap;
 import sk.upjs.paz1c.homer.mapper.ItemRowMapper;
 import java.util.List;
-import java.util.Map;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import sk.upjs.paz1c.homer.Status;
@@ -22,11 +20,6 @@ public class MysqlItemDao extends MysqlGenericDao<Item> implements ItemDao {
      */
     public static final String TABLE_NAME = "items";
 
-    /**
-     * @see MysqlGenericDao#storeMap
-     */
-    public static final Map<String, Object> STORE_MAP = new HashMap<>();
-    
     private JdbcTemplate jdbcTemplate;
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
     private ItemRowMapper itemRowMapper = new ItemRowMapper();
@@ -47,12 +40,13 @@ public class MysqlItemDao extends MysqlGenericDao<Item> implements ItemDao {
      */
     @Override
     public void store(Item item) {
-        STORE_MAP.put("id", item.getId());
-        STORE_MAP.put("list_id", item.getList_id());
-        STORE_MAP.put("product_id", item.getProductId());
-        STORE_MAP.put("amount", item.getAmount());
-        STORE_MAP.put("unit", item.getUnit());
-        STORE_MAP.put("status", item.getStatus());
+        storeMap.put("id", item.getId());
+        storeMap.put("list_id", item.getListId());
+        storeMap.put("product_id", item.getProductId());
+        storeMap.put("recipe_id", item.getRecipeId());
+        storeMap.put("amount", item.getAmount());
+        storeMap.put("unit", item.getUnit());
+        storeMap.put("status", item.getStatus().toInt());
         super.store(item);
     }
 

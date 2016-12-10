@@ -3,6 +3,7 @@ package sk.upjs.paz1c.homer.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
+import sk.upjs.paz1c.homer.Status;
 import sk.upjs.paz1c.homer.entity.ShoppingList;
 
 /**
@@ -24,7 +25,7 @@ public class ShoppingListRowMapper implements RowMapper<ShoppingList> {
         shoppingList.setId(rs.getLong("id"));
         shoppingList.setName(rs.getString("name"));
         shoppingList.setExpiry(rs.getDate("expiry"));
-        shoppingList.setStatus(rs.getInt("status"));
+        shoppingList.setStatus(Status.fromInt(rs.getInt("status")));
         return shoppingList;
     }
 }

@@ -3,6 +3,7 @@ package sk.upjs.paz1c.homer.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
+import sk.upjs.paz1c.homer.Status;
 import sk.upjs.paz1c.homer.entity.Item;
 
 /**
@@ -24,8 +25,8 @@ public class ItemRowMapper implements RowMapper<Item> {
         item.setAmount(rs.getFloat("amount"));
         item.setProduct_id(rs.getLong("product_id"));
         item.setId(rs.getLong("id"));
-        item.setList_id(rs.getLong("list_id"));
-        item.setStatus(rs.getInt("status"));
+        item.setListId(rs.getLong("list_id"));
+        item.setStatus(Status.fromInt(rs.getInt("status")));
         item.setUnit(rs.getString("unit"));
 
         return item;

@@ -8,9 +8,8 @@ public class Item extends Entity{
     
     private Float amount;
     private Long product_id;
-    private Long id;
     private Long list_id;
-    private Integer status;
+    private Long recipe_id;
     private String unit;
 
     
@@ -19,7 +18,7 @@ public class Item extends Entity{
      *
      * @return the value of list_id
      */
-    public Long getList_id() {
+    public Long getListId() {
         return list_id;
     }
 
@@ -28,10 +27,27 @@ public class Item extends Entity{
      *
      * @param list_id new value of list_id
      */
-    public void setList_id(Long list_id) {
+    public void setListId(Long list_id) {
         this.list_id = list_id;
     }
 
+    /**
+     * Get the value of recipe_id
+     *
+     * @returns the value of recipe_id
+     */
+    public Long getRecipeId() {
+        return recipe_id;
+    }
+
+    /**
+     * Set the value of recipe_id
+     *
+     * @param recipe_id new value of recipe_id
+     */
+    public void setRecipeId(Long recipe_id) {
+        this.recipe_id = recipe_id;
+    }
     
     /**
      * Get the value of amount
@@ -70,39 +86,6 @@ public class Item extends Entity{
     }
 
     /**
-     * Get the value of id
-     *
-     * @return the value of id
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * Set the value of id
-     *
-     * @param id new value of id
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-    /**
-     * Get the value of status
-     *
-     * @return the value of status
-     */
-    public Integer getStatus() {
-        return status;
-    }
-    /**
-     * Set the value of status
-     *
-     * @param status new value of status
-     */
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-    /**
      * Get the value of unit
      *
      * @return the value of unit
@@ -110,6 +93,7 @@ public class Item extends Entity{
     public String getUnit() {
         return unit;
     }
+    
     /**
      * Set the value of unit
      *

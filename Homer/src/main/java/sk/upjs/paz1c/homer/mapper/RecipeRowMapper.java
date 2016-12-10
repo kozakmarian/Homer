@@ -3,6 +3,7 @@ package sk.upjs.paz1c.homer.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
+import sk.upjs.paz1c.homer.Status;
 import sk.upjs.paz1c.homer.entity.Recipe;
 
 /**
@@ -29,7 +30,7 @@ public class RecipeRowMapper implements RowMapper<Recipe> {
         recipe.setImage(rs.getString("image"));
         recipe.setInstructions(rs.getString("instructions"));
         recipe.setUrl(rs.getString("url"));
-        recipe.setStatus(rs.getInt("status"));
+        recipe.setStatus(Status.fromInt(rs.getInt("status")));
 
         //recipe.setCategory(rs.getString("category"));
 

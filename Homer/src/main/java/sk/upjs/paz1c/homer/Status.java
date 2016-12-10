@@ -1,5 +1,7 @@
 package sk.upjs.paz1c.homer;
 
+import java.util.EnumSet;
+
 /**
  * Status is an enumeration containing numerical statuses used across
  * the application. They serve primarily for logging and notifications.
@@ -29,9 +31,30 @@ public enum Status {
      */
     DONE(3);
     
-    private Integer value;
+    private final Integer value;
     
     private Status(Integer value) {
         this.value = value;
-    } 
+    }
+    
+    /**
+     * Creates {@link Status} from given integer if such a {@link Status} exists
+     * 
+     * @param i     Integer value of Status
+     * @return      Corresponding status
+     */
+    public static Status fromInt(int i) {
+        return EnumSet.allOf(Status.class)
+                      .stream()
+                      .filter(s -> s.value == i)
+                      .findFirst().get();
+    }
+    
+    /**
+     * Returns integer value of a {@link Status}.
+     * @return  Integer value, never null
+     */
+    public Integer toInt() {
+        return this.value;
+    }
 }
