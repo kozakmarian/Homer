@@ -33,7 +33,8 @@ public class MysqlProductDao extends MysqlGenericDao<Product> implements Product
      */
     @Override
     public List<Product> find(String name) {
-        return jdbcTemplate.query("SELECT * FROM " + TABLE_NAME + " WHERE name = " + name, rowMapper);
+        Object[] params = {name};
+        return jdbcTemplate.query("SELECT * FROM " + TABLE_NAME + " WHERE name = ?", params, rowMapper);
     }
 
     /**

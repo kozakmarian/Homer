@@ -1,6 +1,7 @@
 package sk.upjs.paz1c.homer;
 
 import com.alee.laf.WebLookAndFeel;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -460,10 +461,14 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_listPurchasedButtonActionPerformed
 
     private void searchProductButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchProductButtonActionPerformed
+        searchProductField.setBackground(Color.white);
         String query = searchProductField.getText();
         List<Product> products = productDao.find(query);
         ProductListModel productListModel = (ProductListModel) productList.getModel();
-        productListModel.refreshList(products);
+        if (products.isEmpty())
+            searchProductField.setBackground(new Color(192, 57, 43));
+        else
+            productListModel.refreshList(products);
     }//GEN-LAST:event_searchProductButtonActionPerformed
 
     private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked

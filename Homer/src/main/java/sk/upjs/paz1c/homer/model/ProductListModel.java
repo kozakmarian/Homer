@@ -1,5 +1,6 @@
 package sk.upjs.paz1c.homer.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractListModel;
 import sk.upjs.paz1c.homer.ObjectFactory;
@@ -12,9 +13,7 @@ import sk.upjs.paz1c.homer.entity.Product;
  * @author ntb
  */
 public class ProductListModel extends AbstractListModel<Product> {
-
-  
-    private List<Product> products;
+    private List<Product> products = new ArrayList<>();
     private ProductDao productDao;
 
     public ProductListModel() {
