@@ -3,6 +3,7 @@ package sk.upjs.paz1c.homer.dao;
 import java.util.List;
 import sk.upjs.paz1c.homer.Status;
 import sk.upjs.paz1c.homer.entity.Item;
+import sk.upjs.paz1c.homer.entity.Recipe;
 import sk.upjs.paz1c.homer.entity.ShoppingList;
 
 /**
@@ -21,6 +22,16 @@ public interface ItemDao extends GenericDao<Item>{
      */
     List<Item>           findAll(ShoppingList shoppingList);
 
+    /**
+     * The method acts as a basic filter, using relation between {@link Item}
+     * and {@link Recipe}.
+     * 
+     * @param recipe        A recipe of which Items have to be returned
+     * @return              List of requested {@link Item}s, or null if empty
+     */
+    List<Item>           findAll(Recipe recipe);
+
+    
     /**
      * A quick convenience method, that updates {@link Item} as being bought.
      * 

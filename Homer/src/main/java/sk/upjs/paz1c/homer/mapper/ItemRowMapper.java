@@ -28,6 +28,9 @@ public class ItemRowMapper implements RowMapper<Item> {
         item.setListId(rs.getLong("list_id"));
         item.setStatus(Status.fromInt(rs.getInt("status")));
         item.setUnit(rs.getString("unit"));
+        String name = rs.getString("name");
+        if(name!=null)
+            item.setName(name);
 
         return item;
     }

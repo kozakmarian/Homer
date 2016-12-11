@@ -173,7 +173,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
-                .addComponent(productScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+                .addComponent(productScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -408,7 +408,7 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE)
+            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 671, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -417,42 +417,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    public ShoppingList addSelectedList() {
-        ShoppingList selectedList = (ShoppingList) listComboBox.getSelectedItem();
-        return selectedList;
-    }
-
-    private void listNameFieldActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
-        searchField.setText(shoppingList.getName());
-    }
-
-
-    private void updateItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateItemActionPerformed
-        // TODO add your handling code here:
-        Item item = getSelectedItem();
-        ItemDialog productDialog;
-        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
-        productDialog = new ItemDialog(item, shoppingList, this, true);
-        productDialog.setVisible(true);
-
-    }//GEN-LAST:event_updateItemActionPerformed
-
-    private void listComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listComboBoxActionPerformed
-        // TODO add your handling code here:
-        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
-        ItemListModel model = (ItemListModel) itemList.getModel();
-        model.refresh(shoppingList);
-
-
-    }//GEN-LAST:event_listComboBoxActionPerformed
-
-    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_searchButtonActionPerformed
 
     private void addRecipeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRecipeButtonActionPerformed
         try {
@@ -463,9 +427,99 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_addRecipeButtonActionPerformed
 
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
+        if (evt.getClickCount() == 2) {
+            int row = recipeTable.getSelectedRow();
+            Recipe recipe = ((RecipeTableModel) recipeTable.getModel()).getRecipeAt(row);
+            RecipePanel recipeDetailPanel = new RecipePanel(recipe);
+            String recipeName = recipe.getName();
+            int length = recipeName.length();
+            tabbedPane.addTab(
+                    (length > 16) ? (recipeName.substring(0, length - 3) + "...") : recipeName, recipeDetailPanel);
+            tabbedPane.setSelectedComponent(recipeDetailPanel);
+        }
+    }//GEN-LAST:event_recipeTableMouseClicked
+
     private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_searchFieldActionPerformed
+
+    private void addListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addListButtonActionPerformed
+        // TODO add your handling code here:
+        ShoppingList shoppingList;
+        if (listNameField.getText() != null) {
+            shoppingList = new ShoppingList();
+            shoppingList.setName(listNameField.getText());
+            shoppingList.setExpiry(dateField.getDate());
+            shoppingListDao.store(shoppingList);
+        }
+    }//GEN-LAST:event_addListButtonActionPerformed
+
+    private void listRemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listRemoveButtonActionPerformed
+        Item item = getSelectedItem();
+        itemDao.delete(item);
+    }//GEN-LAST:event_listRemoveButtonActionPerformed
+
+    private void listPurchasedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listPurchasedButtonActionPerformed
+        // TODO add your handling code here:
+
+        Item item = getSelectedItem();
+        itemDao.done(item);
+    }//GEN-LAST:event_listPurchasedButtonActionPerformed
+
+    private void updateItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateItemActionPerformed
+        // TODO add your handling code here:
+        Item item = getSelectedItem();
+        ItemDialog productDialog;
+        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
+        productDialog = new ItemDialog(item, shoppingList, this, true);
+        productDialog.setVisible(true);
+    }//GEN-LAST:event_updateItemActionPerformed
+
+    private void addItemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemButtonActionPerformed
+        // TODO add your handling code here:
+        ItemDialog productDialog;
+        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
+        productDialog = new ItemDialog(shoppingList, this, true);
+        productDialog.setVisible(true);
+
+    }//GEN-LAST:event_addItemButtonActionPerformed
+
+    private void itemListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemListMouseClicked
+        // TODO add your handling code here:
+        selectedItem = itemList.getSelectedIndex();
+    }//GEN-LAST:event_itemListMouseClicked
+
+    private void purchasedCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchasedCheckBoxActionPerformed
+        // TODO add your handling code here:
+        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
+        shoppingList.setStatus(Status.fromInt(3));
+
+    }//GEN-LAST:event_purchasedCheckBoxActionPerformed
+
+    private void listComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listComboBoxActionPerformed
+        // TODO add your handling code here:
+        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
+        ItemListModel model = (ItemListModel) itemList.getModel();
+        model.refresh(shoppingList);
+
+    }//GEN-LAST:event_listComboBoxActionPerformed
+
+    private void searchProductButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchProductButtonActionPerformed
+        searchProductField.setBackground(Color.white);
+        String query = searchProductField.getText();
+        List<Product> products = productDao.find(query);
+        ProductListModel productListModel = (ProductListModel) productList.getModel();
+        if (products.isEmpty()) {
+            searchProductField.setBackground(new Color(192, 57, 43));
+        } else {
+            productListModel.refreshList(products);
+        }
+    }//GEN-LAST:event_searchProductButtonActionPerformed
 
     private void searchProductFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchProductFieldActionPerformed
 
@@ -482,78 +536,19 @@ public class MainFrame extends javax.swing.JFrame {
             ListDialog listDialog = new ListDialog(product, this, true);
             listDialog.setVisible(true);
         }
-
     }//GEN-LAST:event_productListMouseClicked
 
-    private void listPurchasedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listPurchasedButtonActionPerformed
-        // TODO add your handling code here:
+    public ShoppingList addSelectedList() {
+        ShoppingList selectedList = (ShoppingList) listComboBox.getSelectedItem();
+        return selectedList;
+    }
 
-        Item item = getSelectedItem();
-        itemDao.done(item);
-    }//GEN-LAST:event_listPurchasedButtonActionPerformed
-
-    private void searchProductButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchProductButtonActionPerformed
-        searchProductField.setBackground(Color.white);
-        String query = searchProductField.getText();
-        List<Product> products = productDao.find(query);
-        ProductListModel productListModel = (ProductListModel) productList.getModel();
-        if (products.isEmpty()) {
-            searchProductField.setBackground(new Color(192, 57, 43));
-        } else {
-            productListModel.refreshList(products);
-        }
-    }//GEN-LAST:event_searchProductButtonActionPerformed
-
-    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
-        if (evt.getClickCount() == 2) {
-            int row = recipeTable.getSelectedRow();
-            Recipe recipe = ((RecipeTableModel) recipeTable.getModel()).getRecipeAt(row);
-            RecipePanel recipeDetailPanel = new RecipePanel(recipe);
-            String recipeName = recipe.getName();
-            tabbedPane.addTab(recipeName.substring(0, (recipeName.length() > 16) ? 16 : recipeName.length()) + "...", recipeDetailPanel);
-            tabbedPane.setSelectedComponent(recipeDetailPanel);
-        }
-    }//GEN-LAST:event_recipeTableMouseClicked
-
-    private void itemListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemListMouseClicked
-        // TODO add your handling code here:
-        selectedItem = itemList.getSelectedIndex();
-    }//GEN-LAST:event_itemListMouseClicked
-
-    private void listRemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listRemoveButtonActionPerformed
-        Item item = getSelectedItem();
-        itemDao.delete(item);
-
-    }//GEN-LAST:event_listRemoveButtonActionPerformed
-
-    private void purchasedCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchasedCheckBoxActionPerformed
+    private void listNameFieldActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
-        shoppingList.setStatus(Status.fromInt(3));
+        searchField.setText(shoppingList.getName());
+    }
 
-
-    }//GEN-LAST:event_purchasedCheckBoxActionPerformed
-
-    private void addListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addListButtonActionPerformed
-        // TODO add your handling code here:
-        ShoppingList shoppingList;
-        if (listNameField.getText() != null) {
-            shoppingList = new ShoppingList();
-            shoppingList.setName(listNameField.getText());
-            shoppingList.setExpiry(dateField.getDate());
-            shoppingListDao.store(shoppingList);
-        }
-    }//GEN-LAST:event_addListButtonActionPerformed
-
-    private void addItemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemButtonActionPerformed
-        // TODO add your handling code here:
-        ItemDialog productDialog;
-        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
-        productDialog = new ItemDialog(shoppingList, this, true);
-        productDialog.setVisible(true);
-
-
-    }//GEN-LAST:event_addItemButtonActionPerformed
 
     private Item getSelectedItem() {
         // TODO add your handling code here:

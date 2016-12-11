@@ -3,10 +3,10 @@ package sk.upjs.paz1c.homer.dao.mysql;
 import sk.upjs.paz1c.homer.mapper.ItemRowMapper;
 import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import sk.upjs.paz1c.homer.Status;
 import sk.upjs.paz1c.homer.dao.ItemDao;
 import sk.upjs.paz1c.homer.entity.Item;
+import sk.upjs.paz1c.homer.entity.Recipe;
 import sk.upjs.paz1c.homer.entity.ShoppingList;
 
 /**
@@ -19,19 +19,21 @@ public class MysqlItemDao extends MysqlGenericDao<Item> implements ItemDao {
      * @see MysqlGenericDao#tableName
      */
     public static final String TABLE_NAME = "items";
-
-    private JdbcTemplate jdbcTemplate;
-    private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-    private ItemRowMapper itemRowMapper = new ItemRowMapper();
-
-   
-    
+ 
     /**
      * @see MysqlGenericDao
      * @param jdbcTemplate
      */
     public MysqlItemDao(JdbcTemplate jdbcTemplate) {
         super(jdbcTemplate, new ItemRowMapper(), TABLE_NAME);
+    }
+
+    @Override
+    public List<Item> findAll(Recipe recipe) {
+        Object[] params = {recipe.getId()};
+        return jdbcTemplate.query(
+                "SELECT i.*, p.name FROM items AS i LEFT JOIN "
+                + MysqlProductDao.TABLE_NAME + " AS p ON i.product_id = p.id WHERE i.recipe_id = ?;", params, rowMapper);
     }
 
     /**
@@ -66,7 +68,9 @@ public class MysqlItemDao extends MysqlGenericDao<Item> implements ItemDao {
      */
     @Override
     public List<Item> findAll(ShoppingList shoppingList) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Object[] params = {shoppingList.getId()};
+        return jdbcTemplate.query("SELECT i.*, p.name FROM " + TABLE_NAME + " AS i LEFT JOIN "
+                + MysqlProductDao.TABLE_NAME + " AS p ON i.product_id = p.id WHERE i.list_id = ?;", params, rowMapper);
     }
     
 }
