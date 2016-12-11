@@ -57,7 +57,7 @@ public enum ObjectFactory {
 
     public JdbcTemplate getJdbcTemplate() {
         MysqlDataSource dataSource = new MysqlDataSource();
-        dataSource.setUrl("jdbc:mysql://cfftw.ddns.net/homer");
+        dataSource.setUrl("jdbc:mysql://cfftw.ddns.net/homer?characterEncoding=utf8");
         dataSource.setUser("homer");
         dataSource.setPort(3306);
         dataSource.setPassword("plate-watch-window");

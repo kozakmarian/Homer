@@ -45,7 +45,8 @@ public class RecipeParser {
                                 .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
                                 .referrer("http://www.google.com");
         // @todo fix encoding
-        Document doc = Jsoup.parse(new String(connection.execute().bodyAsBytes(), UTF_8));
+        String html = new String(connection.execute().bodyAsBytes(), UTF_8);
+        Document doc = Jsoup.parse(html);
         Recipe recipe = new Recipe();
         Element recipeNode = doc.select("article").get(0);
 
