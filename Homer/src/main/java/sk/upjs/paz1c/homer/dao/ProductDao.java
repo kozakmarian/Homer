@@ -17,6 +17,11 @@ public interface ProductDao extends GenericDao<Product> {
      * @return List<Product>    or null if none
      */
     List<Product>      find(Recipe recipe);
-    List<Product> find(String name);
-   
+    
+    /**
+     *
+     * @param name              Name to look for
+     * @return List<Product>    or null if none
+     */
+    List<Product>      find(String name);
 }

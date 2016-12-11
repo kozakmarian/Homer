@@ -3,6 +3,7 @@ package sk.upjs.paz1c.homer;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.stream.Collectors;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Document;
@@ -13,6 +14,7 @@ import sk.upjs.paz1c.homer.dao.RecipeDao;
 import sk.upjs.paz1c.homer.entity.Item;
 import sk.upjs.paz1c.homer.entity.Product;
 import sk.upjs.paz1c.homer.entity.Recipe;
+import static java.nio.charset.StandardCharsets.*;
 
 /**
  *
@@ -39,10 +41,11 @@ public class RecipeParser {
         if (!url.contains("recepty.sk")) {
             throw new UnsupportedOperationException("Recipe loading is curerntly supported only from 'recepty.sk' website");
         }
-        Document doc = Jsoup.connect(url)
-                .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
-                .referrer("http://www.google.com")
-                .get();
+        Connection connection = Jsoup.connect(url)
+                                .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                                .referrer("http://www.google.com");
+        // @todo fix encoding
+        Document doc = Jsoup.parse(new String(connection.execute().bodyAsBytes(), UTF_8));
         Recipe recipe = new Recipe();
         Element recipeNode = doc.select("article").get(0);
 
@@ -50,31 +53,30 @@ public class RecipeParser {
         recipe.setName(recipeNode.select(".main-title").text());
         recipe.setImage(
                 recipeNode
-                        .select("picture[data-image-source='recipe_content']>img")
-                        .attr("data-src")
+                .select("picture[data-image-source='recipe_content']>img")
+                .attr("data-src")
         );
         recipe.setPreparation(Integer.parseInt(
                 recipeNode
-                        .select(".preparation>.info-text")
-                        .text().replaceAll("[A-z]", "")
+                .select(".preparation>.info-text")
+                .text().replaceAll("[A-z]", "")
         ));
         recipe.setCooking(Integer.parseInt(
                 recipeNode
-                        .select(".cooking>.info-text")
-                        .text().replaceAll("[A-z]", "")
+                .select(".cooking>.info-text")
+                .text().replaceAll("[A-z]", "")
         ));
         recipe.setPortions(Integer.parseInt(
                 recipeNode
-                        .select(".chunks>.info-text")
-                        .text()
+                .select(".chunks>.info-text")
+                .text()
         ));
-        int idx = 0;
+        
         recipe.setInstructions(
                 recipeNode
-                        .select(".procedure-item").stream()
-                        .map(Element::text)
-                        .map(s -> idx + ". " + s)
-                        .collect(Collectors.joining("\n"))
+                .select(".procedure-item").stream()
+                .map(Element::text)
+                .collect(Collectors.joining("\n"))
         );
         recipe.setStatus(Status.NORMAL);
         RecipeDao recipeDao = ObjectFactory.INSTANCE.getDao(Recipe.class);
@@ -85,7 +87,6 @@ public class RecipeParser {
         ItemDao itemDao = ObjectFactory.INSTANCE.getDao(Item.class);
 
         ingredients.stream().forEach((i) -> {
-            // @todo product add;
             Product p = new Product();
             p.setName(i.select(".name").text());
             p.setStatus(Status.NORMAL);
@@ -98,11 +99,12 @@ public class RecipeParser {
             } catch (NumberFormatException e) {
                 if (c[0].contains("/")) {
                     double[] frac = Arrays.stream(c[0].split("/"))
-                                    .mapToDouble(Float::parseFloat).toArray();
+                                    .mapToDouble(Float::parseFloat)
+                                    .toArray();
                     it.setAmount((float)(frac[0] / frac[1]));
                 }
             }
-            it.setUnit(c[1]);
+            it.setUnit((c.length==2) ? c[1] : "");
             it.setStatus(Status.NORMAL);
             it.setProduct_id(p.getId());
             it.setRecipeId(recipe.getId());

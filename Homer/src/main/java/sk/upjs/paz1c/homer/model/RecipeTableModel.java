@@ -14,21 +14,22 @@ import sk.upjs.paz1c.homer.entity.Recipe;
  */
 public class RecipeTableModel extends AbstractTableModel {
 
-    private static final int COLUMN_COUNT = 4;
+    private static final int COLUMN_COUNT = 6;
     private static final int COLUMN_INDEX_NAME = 0;
-    private static final int COLUM_INDEX_CATEGORY = 1;
-    private static final int COLUMN_INDEX_PORTIONS = 2;
-    private static final int COLUMN_INDEX_STATUS = 3;
+    private static final int COLUMN_INDEX_CATEGORY = 1;
+    private static final int COLUMN_INDEX_PREP = 2;
+    private static final int COLUMN_INDEX_COOKING = 3;
+    private static final int COLUMN_INDEX_PORTIONS = 4;
+    private static final int COLUMN_INDEX_STATUS = 5;
+    
+    private static final String[] COLUMN_NAMES = {"Názov", "Kategória", "Príprava", "Varenie" , "Počet porcií", "Stav"};
 
     private RecipeDao recipeDao = ObjectFactory.INSTANCE.getDao(Recipe.class);
     private List<Recipe> recipes = new LinkedList<>();
 
     @Override
     public int getRowCount() {
-        {
             return recipes.size();
-        }
-
     }
 
     @Override
@@ -37,17 +38,26 @@ public class RecipeTableModel extends AbstractTableModel {
     }
 
     @Override
+    public String getColumnName(int column) {
+        return COLUMN_NAMES[column];
+    }
+    
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Recipe recipe = recipes.get(rowIndex);
         switch (columnIndex) {
             case COLUMN_INDEX_NAME:
                 return recipe.getName();
-            case COLUM_INDEX_CATEGORY:
+            case COLUMN_INDEX_CATEGORY:
                 return recipe.getCategory();
             case COLUMN_INDEX_PORTIONS:
                 return recipe.getPortions();
             case COLUMN_INDEX_STATUS:
                 return recipe.getStatus();
+            case COLUMN_INDEX_PREP:
+                return recipe.getPreparation();
+            case COLUMN_INDEX_COOKING:
+                return recipe.getCooking();
         }
 
         return "???";
@@ -68,5 +78,8 @@ public class RecipeTableModel extends AbstractTableModel {
 
         fireTableDataChanged();
     }
-
+    
+    public Recipe getRecipeAt(int row){
+        return recipes.get(row);
+    }
 }
