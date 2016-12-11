@@ -20,11 +20,11 @@ import sk.upjs.paz1c.homer.entity.ShoppingList;
  * @author ntb
  */
 public class ListDialog extends javax.swing.JDialog {
-    
+
     private Product product;
     private ShoppingListDao shoppingListDao = ObjectFactory.INSTANCE.getDao(ShoppingList.class);
     private ProductDao productDao = ObjectFactory.INSTANCE.getDao(Product.class);
-    
+    private ItemDao itemDao = ObjectFactory.INSTANCE.getDao(Item.class);
 
     /**
      * Creates new form createShoppingListDialog
@@ -33,12 +33,13 @@ public class ListDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
     }
-    
-    public ListDialog(Product product, Frame parent, boolean modal){
+
+    public ListDialog(Product product, Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.product=product;
-        
+        this.product = product;
+        productNameLabel.setText(product.getName());
+
     }
 
     /**
@@ -52,11 +53,12 @@ public class ListDialog extends javax.swing.JDialog {
 
         listLabel = new javax.swing.JLabel();
         okButton = new javax.swing.JButton();
-        jSpinner1 = new javax.swing.JSpinner();
+        amountSpinner = new javax.swing.JSpinner();
         jLabel1 = new javax.swing.JLabel();
         listComboBox = new javax.swing.JComboBox<>();
         listTextField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        productNameLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -73,9 +75,12 @@ public class ListDialog extends javax.swing.JDialog {
 
         listComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        listTextField.setText("jTextField1");
-
         jLabel2.setText("Vytvoriť nový zoznam:");
+
+        productNameLabel.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        productNameLabel.setText("Názov pridávanej  položky");
+        productNameLabel.setToolTipText("");
+        productNameLabel.setAutoscrolls(true);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -84,25 +89,30 @@ public class ListDialog extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(listLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(listTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(productNameLabel)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)
-                        .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(listComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(listLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(amountSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(listComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(listTextField))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(48, 48, 48)
+                .addGap(16, 16, 16)
+                .addComponent(productNameLabel)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(listLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(listComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -110,12 +120,12 @@ public class ListDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(listTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(amountSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(okButton)
-                    .addComponent(jLabel1)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(70, 70, 70))
+                    .addComponent(jLabel1))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
 
         pack();
@@ -123,24 +133,26 @@ public class ListDialog extends javax.swing.JDialog {
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         // TODO add your handling code here:
-        
-        if(listTextField.getText()!=null){
-        ShoppingList shoppingList = new ShoppingList();
-        shoppingList.setName(listTextField.getText());
-        Timestamp stamp = new Timestamp(System.currentTimeMillis());
-        Date date = new Date(stamp.getTime());
-        shoppingList.setExpiry(date);
-        shoppingListDao.store(shoppingList);
-        
-        
-    }else{
-          ShoppingList shoppingList = (ShoppingList)listComboBox.getSelectedItem();
-          
+        ShoppingList shoppingList;
+        if (listTextField.getText() != null) {
+            shoppingList = new ShoppingList();
+            shoppingList.setName(listTextField.getText());
+            Timestamp stamp = new Timestamp(System.currentTimeMillis());
+            Date date = new Date(stamp.getTime());
+            shoppingList.setExpiry(date);
+            shoppingListDao.store(shoppingList);
+
+        } else {
+            shoppingList = (ShoppingList) listComboBox.getSelectedItem();
+
         }
-         //to do
-        // uloz do nakupneho zoznamu vybranu polozku
-        //???
-       
+        Item item = new Item();
+        item.setProduct_id(product.getId());
+        item.setListId(shoppingList.getId());
+        //set unit ???
+        item.setAmount((Float) amountSpinner.getValue());
+
+        itemDao.store(item);
         this.dispose();
     }//GEN-LAST:event_okButtonActionPerformed
 
@@ -194,12 +206,13 @@ public class ListDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JSpinner amountSpinner;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JComboBox<String> listComboBox;
     private javax.swing.JLabel listLabel;
     private javax.swing.JTextField listTextField;
     private javax.swing.JButton okButton;
+    private javax.swing.JLabel productNameLabel;
     // End of variables declaration//GEN-END:variables
 }
