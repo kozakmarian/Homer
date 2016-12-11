@@ -5,6 +5,8 @@ import com.jhlabs.image.Gradient;
 import java.awt.Dimension;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.util.List;
+import javax.swing.ListModel;
 import sk.upjs.paz1c.homer.dao.ItemDao;
 import sk.upjs.paz1c.homer.dao.ProductDao;
 import sk.upjs.paz1c.homer.dao.RecipeDao;
@@ -15,6 +17,7 @@ import sk.upjs.paz1c.homer.entity.ShoppingList;
 import sk.upjs.paz1c.homer.model.ItemListModel;
 import sk.upjs.paz1c.homer.model.ListComboBoxModel;
 import sk.upjs.paz1c.homer.model.ProductComboBoxModel;
+import sk.upjs.paz1c.homer.model.ProductListModel;
 import sk.upjs.paz1c.homer.model.RecipeTableModel;
 
 /**
@@ -31,6 +34,7 @@ public class MainFrame extends javax.swing.JFrame {
     private ItemDao itemDao = ObjectFactory.INSTANCE.getDao(Item.class);
     private ProductDao productDao = ObjectFactory.INSTANCE.getDao(Product.class);
     private Dimension windowSize;
+
     ;
     /**
      * Creates new form MainFrame
@@ -61,16 +65,12 @@ public class MainFrame extends javax.swing.JFrame {
 
         tabbedPane = new javax.swing.JTabbedPane();
         procuctPanel = new javax.swing.JPanel();
-        productComboBox = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        addButton = new javax.swing.JButton();
-        chooseListComboBox = new javax.swing.JComboBox<>();
-        jLabel3 = new javax.swing.JLabel();
         productScrollPane = new javax.swing.JScrollPane();
         productList = new javax.swing.JList<>();
-        jSpinner1 = new javax.swing.JSpinner();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        searchProductField = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        searchProductButton = new javax.swing.JButton();
         listsPanel = new javax.swing.JPanel();
         listComboBox = new javax.swing.JComboBox<>();
         listNameLabel = new javax.swing.JLabel();
@@ -122,82 +122,65 @@ public class MainFrame extends javax.swing.JFrame {
         tabbedPane.setTabPlacement(javax.swing.JTabbedPane.LEFT);
         tabbedPane.setMinimumSize(new java.awt.Dimension(143, 200));
 
-        productComboBox.setModel(new ProductComboBoxModel());
+        jLabel2.setText("Hľadať produkt:");
 
-        jLabel2.setText("Vybrať produkt:");
-
-        addButton.setText("Pridat do zoznamu...");
-
-        chooseListComboBox.setModel(new ListComboBoxModel());
-        chooseListComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chooseListComboBoxActionPerformed(evt);
+        productList.setModel(new ProductListModel());
+        productList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                productListMouseClicked(evt);
             }
-        });
-
-        jLabel3.setText("Vybrať zoznam:");
-
-        productList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
         });
         productScrollPane.setViewportView(productList);
 
-        jLabel4.setText("Množstvo:");
+        searchProductField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchProductFieldActionPerformed(evt);
+            }
+        });
 
-        jLabel5.setText("//Todo: dat prec comboboxy a pridat hladanie tak ako pri receptoch.");
+        jLabel3.setText("//po dvojkliku na polozku sa objavi? dialog na pridanie polozky do zoznamu");
+
+        searchProductButton.setText("Hľadať");
+        searchProductButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchProductButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout procuctPanelLayout = new javax.swing.GroupLayout(procuctPanel);
         procuctPanel.setLayout(procuctPanelLayout);
         procuctPanelLayout.setHorizontalGroup(
             procuctPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(procuctPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, procuctPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(procuctPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(procuctPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(chooseListComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, procuctPanelLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel4)
-                        .addGap(18, 18, 18)
-                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 350, Short.MAX_VALUE)
-                        .addComponent(addButton))
-                    .addComponent(productScrollPane, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(procuctPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(procuctPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(procuctPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(productComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(searchProductField)
+                .addGap(18, 18, 18)
+                .addComponent(searchProductButton)
                 .addGap(41, 41, 41))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, procuctPanelLayout.createSequentialGroup()
+                .addContainerGap(119, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addGap(191, 191, 191))
+            .addGroup(procuctPanelLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(productScrollPane)
+                .addContainerGap())
         );
         procuctPanelLayout.setVerticalGroup(
             procuctPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(procuctPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel5)
-                .addGap(8, 8, 8)
+                .addGap(32, 32, 32)
                 .addGroup(procuctPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(productComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(procuctPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(chooseListComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addComponent(productScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 288, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(procuctPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addButton)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addGap(19, 19, 19))
+                    .addComponent(searchProductField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchProductButton))
+                .addGap(15, 15, 15)
+                .addComponent(jLabel3)
+                .addGap(18, 18, 18)
+                .addComponent(productScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         tabbedPane.addTab("Produkty", procuctPanel);
@@ -232,6 +215,11 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         listPurchasedButton.setText("Kúpené");
+        listPurchasedButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                listPurchasedButtonActionPerformed(evt);
+            }
+        });
 
         listRemoveButton.setText("Odstrániť");
 
@@ -388,6 +376,12 @@ public class MainFrame extends javax.swing.JFrame {
 
         tabbedPane.addTab("Detail", detailPanel);
 
+        searchField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchFieldActionPerformed(evt);
+            }
+        });
+
         recipeTable.setModel(new RecipeTableModel());
         recipeScrollPane.setViewportView(recipeTable);
 
@@ -485,11 +479,6 @@ public class MainFrame extends javax.swing.JFrame {
         return selectedList;
     }
 
-    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-
-    }
-
     private void listNameFieldActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
@@ -498,10 +487,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void listAddButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-        ListDialog listDialog = new ListDialog(this, true);
-        listDialog.setVisible(true);
-        //???
-        ((ListComboBoxModel) listComboBox.getModel()).refresh();
+    
 
     }
 
@@ -524,10 +510,6 @@ public class MainFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_listComboBoxActionPerformed
 
-    private void chooseListComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chooseListComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_chooseListComboBoxActionPerformed
-
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         // TODO add your handling code here:
 
@@ -536,6 +518,41 @@ public class MainFrame extends javax.swing.JFrame {
     private void addRecipeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRecipeButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_addRecipeButtonActionPerformed
+
+    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchFieldActionPerformed
+
+    private void searchProductFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchProductFieldActionPerformed
+    
+    }//GEN-LAST:event_searchProductFieldActionPerformed
+
+    private void productListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productListMouseClicked
+        // TODO add your handling code here:
+
+        if (evt.getClickCount() == 2) {
+            int riadok = productList.getSelectedIndex();
+            Product product;
+            product = (Product) ((ListModel) productList.getModel()).getElementAt(riadok);
+
+            ListDialog listDialog = new ListDialog(product, this, true);
+            listDialog.setVisible(true);
+        }
+
+    }//GEN-LAST:event_productListMouseClicked
+
+    private void listPurchasedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listPurchasedButtonActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_listPurchasedButtonActionPerformed
+
+    private void searchProductButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchProductButtonActionPerformed
+        // TODO add your handling code here:
+           String query = searchProductField.getText();
+        List<Product> products = productDao.find(query);
+        ProductListModel productListModel = (ProductListModel) productList.getModel();
+        productListModel.refreshList(products);
+    }//GEN-LAST:event_searchProductButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -553,12 +570,10 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addButton;
     private javax.swing.JButton addListButton;
     private javax.swing.JButton addRecipeButton;
     private javax.swing.JLabel addRecipeLabel;
     private javax.swing.JButton buyButton;
-    private javax.swing.JComboBox<ShoppingList> chooseListComboBox;
     private javax.swing.JLabel cookingDurationLabel;
     private javax.swing.JLabel cookingLabel;
     private javax.swing.JPanel detailPanel;
@@ -571,9 +586,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JButton listAddButton;
     private javax.swing.JComboBox<ShoppingList> listComboBox;
     private javax.swing.JLabel listDateLabel;
@@ -591,8 +603,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel preparationDurationLabel;
     private javax.swing.JLabel preparationLabel;
     private javax.swing.JPanel procuctPanel;
-    private javax.swing.JComboBox<Product> productComboBox;
-    private javax.swing.JList<String> productList;
+    private javax.swing.JList<Product> productList;
     private javax.swing.JScrollPane productScrollPane;
     private javax.swing.JCheckBox purchasedCheckBox;
     private javax.swing.JLabel recipeNameLabel;
@@ -602,6 +613,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField recipeUrlTextField;
     private javax.swing.JButton searchButton;
     private javax.swing.JTextField searchField;
+    private javax.swing.JButton searchProductButton;
+    private javax.swing.JTextField searchProductField;
     private javax.swing.JTabbedPane tabbedPane;
     private com.alee.extended.date.WebDateField webDateField2;
     // End of variables declaration//GEN-END:variables
