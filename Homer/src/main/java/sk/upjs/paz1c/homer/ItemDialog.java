@@ -34,7 +34,7 @@ public class ItemDialog extends javax.swing.JDialog {
         initComponents();
         updateLabel.setText("Upraviť");
         this.item = item;
-        this.item.setId(shoppingList.getId());
+        this.item.setListId(shoppingList.getId());
         itemNameTextField.setText(item.getName());
 
     }
@@ -43,10 +43,9 @@ public class ItemDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         updateLabel.setText("Pridať");
-        this.item = null;
-        this.item.setId(shoppingList.getId());
+        this.item = new Item();
+        this.item.setListId(shoppingList.getId());
         itemNameTextField.setText(item.getName());
-
     }
 
     /**
@@ -144,8 +143,7 @@ public class ItemDialog extends javax.swing.JDialog {
         if (item != null) {
             //update item
             item.setName(string);
-            item.setAmount(
-                    (Float) amountSpinner.getValue());
+            item.setAmount((float)amountSpinner.getValue());
             itemDao.store(item);
             this.dispose();
         } else {

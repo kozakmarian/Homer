@@ -13,14 +13,14 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import org.xhtmlrenderer.simple.XHTMLPanel;
+//import org.xhtmlrenderer.simple.XHTMLPanel;
 import sk.upjs.paz1c.homer.entity.Recipe;
 
 /**
  * @deprecated Detail UI je uz prerobene.
  * @author dyske
  */
-public class RecipeEditorPane extends XHTMLPanel {
+public class RecipeEditorPane {
     
     public RecipeEditorPane() {
         super();
@@ -36,7 +36,7 @@ public class RecipeEditorPane extends XHTMLPanel {
         this.setText(recipe);
     }
     public void setText(String s) {
-        this.setDocumentFromString(s, "/", this.getSharedContext().getNamespaceHandler());
+        //this.setDocumentFromString(s, "/", this.getSharedContext().getNamespaceHandler());
     }
 
     public void setText(Recipe r) {
@@ -46,8 +46,8 @@ public class RecipeEditorPane extends XHTMLPanel {
                 f = this.generateFromTemplate(r);
             if (f == null)
                 this.setText(r.getInstructions());
-            else
-                this.setDocument(f);
+//            else
+//                this.setDocument(f);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -51,7 +51,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="tabbedPane" alignment="0" pref="671" max="32767" attributes="0"/>
+          <Component id="tabbedPane" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -116,7 +116,7 @@
                       <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                       <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="productScrollPane" pref="415" max="32767" attributes="0"/>
+                      <Component id="productScrollPane" pref="369" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -192,8 +192,8 @@
                               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="updateItem" max="32767" attributes="0"/>
-                                      <Component id="addItemButton" max="32767" attributes="0"/>
+                                      <Component id="listEditButton" max="32767" attributes="0"/>
+                                      <Component id="listAddButton" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="listPurchasedButton" alignment="1" max="32767" attributes="0"/>
@@ -219,7 +219,7 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="listDateLabel" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="dateField" min="-2" pref="135" max="-2" attributes="0"/>
+                                      <Component id="webDateField2" min="-2" pref="135" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -241,7 +241,7 @@
                           <Component id="listNameField" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="listNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="listDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="dateField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="webDateField2" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -253,9 +253,9 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="listScrollPane" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <Component id="addItemButton" min="-2" max="-2" attributes="0"/>
+                              <Component id="listAddButton" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="updateItem" min="-2" max="-2" attributes="0"/>
+                              <Component id="listEditButton" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="listPurchasedButton" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -298,9 +298,6 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Nak&#xfa;pen&#xe9;"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="purchasedCheckBoxActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="listStatusLabel">
               <Properties>
@@ -325,29 +322,23 @@
                       <Connection code="new ItemListModel(shoppingList)" type="code"/>
                     </Property>
                   </Properties>
-                  <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="itemListMouseClicked"/>
-                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
                   </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JButton" name="addItemButton">
+            <Component class="javax.swing.JButton" name="listAddButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Prida&#x165;..."/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addItemButtonActionPerformed"/>
-              </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="updateItem">
+            <Component class="javax.swing.JButton" name="listEditButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Upravi&#x165;..."/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateItemActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="listEditButtonActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="listPurchasedButton">
@@ -362,19 +353,13 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Odstr&#xe1;ni&#x165;"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="listRemoveButtonActionPerformed"/>
-              </Events>
             </Component>
-            <Component class="com.alee.extended.date.WebDateField" name="dateField">
+            <Component class="com.alee.extended.date.WebDateField" name="webDateField2">
             </Component>
             <Component class="javax.swing.JButton" name="addListButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Prida&#x165; zoznam..."/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addListButtonActionPerformed"/>
-              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -431,7 +416,7 @@
                           <Component id="addRecipeButton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                      <Component id="recipeScrollPane" max="32767" attributes="0"/>
+                      <Component id="recipeScrollPane" pref="387" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

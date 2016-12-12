@@ -2,29 +2,28 @@ package sk.upjs.paz1c.homer;
 
 import com.alee.extended.image.DisplayType;
 import com.alee.extended.image.WebImage;
-import com.alee.laf.button.WebButton;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.list.WebList;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollPane;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import javax.swing.GroupLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import sk.upjs.paz1c.homer.dao.ItemDao;
-import sk.upjs.paz1c.homer.entity.Item;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import sk.upjs.paz1c.homer.entity.Recipe;
 import sk.upjs.paz1c.homer.model.RecipeItemListModel;
 
@@ -46,12 +45,11 @@ public class RecipePanel extends JPanel {
     private final JLabel preparationDurationLabel = new WebLabel();
     private final JLabel portionsCountLabel = new WebLabel();
     private final JLabel recipeNameLabel = new WebLabel();
+    private final JLabel instructions = new WebLabel();
     private JList recipeItemList = new WebList();
-//    private JLabel instruction = new WebLabel();
     private WebImage recipeImage;
-    private List<JLabel> instructions = new ArrayList<>();
     private JScrollPane recipeItemListScrollPane;
-    private JScrollPane detailScrollPane;
+    private JScrollPane instructionsScrollPane;
    
     private final Recipe recipe;
     
@@ -59,10 +57,6 @@ public class RecipePanel extends JPanel {
         this.recipe  = recipe;
         this.initComponents();
         this.setComponentContents();
-        recipeItemList = new WebList(new RecipeItemListModel(recipe));
-        for (String instruction : recipe.getInstructions().split("\n")) {
-            instructions.add(new JLabel(instruction));
-        }
     }
 
     private void setComponentContents() {
@@ -70,6 +64,22 @@ public class RecipePanel extends JPanel {
         portionsCountLabel.setText(recipe.getPortions().toString());
         preparationDurationLabel.setText(recipe.getPreparation().toString());
         cookingDurationLabel.setText(recipe.getCooking().toString());
+        
+        recipeItemList = new WebList(new RecipeItemListModel(recipe));
+        
+        instructions.setText(
+                Arrays.stream(recipe.getInstructions().split("\n"))
+                        .map(i -> "<li>" + i + "</li>")
+                        .collect(Collectors.joining("\n", "<html><ul style=\"margin-left:18px;\">", "</ul></html>"))
+        );
+        
+        Dimension panelSize = this.getSize();
+        instructionsPanel.setMaximumSize(new Dimension((int)(panelSize.getWidth() / 2), (int)(panelSize.getHeight() / 2)));
+        recipeNameLabel.setMaximumSize(new Dimension((int)(panelSize.getWidth() / 3), (int)(panelSize.getHeight() / 3)));
+        
+        instructions.setMinimumSize(new Dimension((int)(panelSize.getWidth() / 2), (int)(panelSize.getHeight() / 2)));
+        instructions.setPreferredSize(new Dimension((int)(panelSize.getWidth() / 2), (int)(panelSize.getHeight() / 2)));
+        instructions.setMaximumSize(new Dimension((int)(panelSize.getWidth() / 2), (int)(panelSize.getHeight() / 2)));
         
         recipeImage.setDisplayType(DisplayType.fitComponent);
         recipeImage.setPreferredSize(imagePanel.getMaximumSize());
@@ -83,64 +93,64 @@ public class RecipePanel extends JPanel {
                     );
             recipeImage = new WebImage(ImageIO.read(f));
         } catch (IOException e) {
-            System.err.println(recipe.getImage());
+            System.err.println("Failed to load: " + recipe.getImage());
         }
-        detailScrollPane = new WebScrollPane(recipeImage); //instructionsEditorPane
+        instructionsScrollPane = new WebScrollPane(instructions);
         recipeNameLabel.setFont(new Font("Sans Serif", Font.BOLD, 18));
-
+        
+        recipeItemListScrollPane = new WebScrollPane(recipeItemList);
+        instructionsScrollPane = new WebScrollPane(instructions);   
+        
         javax.swing.GroupLayout imagePanelLayout = new javax.swing.GroupLayout(imagePanel);
         imagePanel.setLayout(imagePanelLayout);
         imagePanelLayout.setHorizontalGroup(
             imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(recipeImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE/2, Short.MAX_VALUE)
+            .addComponent(recipeImage, javax.swing.GroupLayout.DEFAULT_SIZE, (int)(665*0.5), Short.MAX_VALUE)
         );
         imagePanelLayout.setVerticalGroup(
             imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(recipeImage, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE/2, 254, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, imagePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(recipeImage, javax.swing.GroupLayout.DEFAULT_SIZE, (int)(374*0.5), Short.MAX_VALUE))
         );
 
-        instructionsLabel.setText("Postup");
+        instructions.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        instructionsScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        instructionsScrollPane.setViewportView(instructions);
 
-//        instruction.setText("Instrukcia 1");
-        
-        recipeItemListScrollPane = new WebScrollPane(recipeItemList);
         recipeItemList.setModel(new RecipeItemListModel(recipe));
         recipeItemList.setCellRenderer(new RecipeItemListCellRenderer());
-
-        ingredientsLabel.setText("Ingrediencie:");
-
         
+        recipeItemListScrollPane.setViewportView(recipeItemList);
+
         javax.swing.GroupLayout instructionsPanelLayout = new javax.swing.GroupLayout(instructionsPanel);
-        
-        // Meh kto povedal ze to nemozem upravovat xD
-        GroupLayout.SequentialGroup instructionsGroupHorizontal = instructionsPanelLayout.createSequentialGroup();
-        for (JLabel l : instructions) instructionsGroupHorizontal.addComponent(l).addGap(0, 0, Short.MAX_VALUE);
-        
-        GroupLayout.SequentialGroup instructionsGroupVertical = instructionsPanelLayout.createSequentialGroup();
-        instructionsGroupVertical.addContainerGap()
-                .addComponent(ingredientsLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(recipeItemListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(instructionsLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED);
-        for (JLabel l : instructions) instructionsGroupVertical.addComponent(l).addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE);
-        
         instructionsPanel.setLayout(instructionsPanelLayout);
         instructionsPanelLayout.setHorizontalGroup(
             instructionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(instructionsGroupHorizontal)
-            .addComponent(recipeItemListScrollPane)
-            .addGroup(instructionsPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, instructionsPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(instructionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(instructionsLabel)
-                    .addComponent(ingredientsLabel))
-                .addContainerGap(228, Short.MAX_VALUE))
+                .addGroup(instructionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(instructionsScrollPane)
+                    .addComponent(recipeItemListScrollPane, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, instructionsPanelLayout.createSequentialGroup()
+                        .addGroup(instructionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(ingredientsLabel)
+                            .addComponent(instructionsLabel))
+                        .addGap(0, 328, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         instructionsPanelLayout.setVerticalGroup(
             instructionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(instructionsGroupVertical)
+            .addGroup(instructionsPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(ingredientsLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(recipeItemListScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(instructionsLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(instructionsScrollPane)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout infoPanelLayout = new javax.swing.GroupLayout(infoPanel);
@@ -159,7 +169,7 @@ public class RecipePanel extends JPanel {
                         .addComponent(portionsCountLabel))
                     .addGroup(infoPanelLayout.createSequentialGroup()
                         .addComponent(preparationLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 171, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(preparationDurationLabel))
                     .addGroup(infoPanelLayout.createSequentialGroup()
                         .addComponent(cookingLabel)
@@ -183,7 +193,7 @@ public class RecipePanel extends JPanel {
                 .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cookingLabel)
                     .addComponent(cookingDurationLabel))
-                .addContainerGap(172, Short.MAX_VALUE))
+                .addContainerGap(126, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout detailPanelLayout = new javax.swing.GroupLayout(this);
@@ -192,10 +202,10 @@ public class RecipePanel extends JPanel {
             detailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(detailPanelLayout.createSequentialGroup()
                 .addGroup(detailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(imagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(detailPanelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(infoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(infoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(instructionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -203,10 +213,10 @@ public class RecipePanel extends JPanel {
             detailPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(detailPanelLayout.createSequentialGroup()
                 .addComponent(imagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(infoPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(instructionsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(instructionsPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }
 }

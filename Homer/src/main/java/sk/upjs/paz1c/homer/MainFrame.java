@@ -5,17 +5,15 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.ListModel;
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sk.upjs.paz1c.homer.dao.ItemDao;
 import sk.upjs.paz1c.homer.dao.ProductDao;
 import sk.upjs.paz1c.homer.dao.RecipeDao;
-import sk.upjs.paz1c.homer.dao.ShoppingListDao;
 import sk.upjs.paz1c.homer.entity.Item;
 import sk.upjs.paz1c.homer.entity.Product;
 import sk.upjs.paz1c.homer.entity.Recipe;
@@ -38,10 +36,8 @@ public class MainFrame extends javax.swing.JFrame {
     private final RecipeDao recipeDao = ObjectFactory.INSTANCE.getDao(Recipe.class);
     private final ItemDao itemDao = ObjectFactory.INSTANCE.getDao(Item.class);
     private final ProductDao productDao = ObjectFactory.INSTANCE.getDao(Product.class);
-    private final ShoppingListDao shoppingListDao = ObjectFactory.INSTANCE.getDao(ShoppingList.class);
     private final Dimension windowSize;
-    private int selectedItem;
-
+    
     /**
      * Creates new form MainFrame
      */
@@ -51,7 +47,9 @@ public class MainFrame extends javax.swing.JFrame {
         int height = gd.getDisplayMode().getHeight() * 2 / 2;
         windowSize = new Dimension(width, height);
         initComponents();
-
+        tabbedPane.setMnemonicAt(0, KeyEvent.VK_P);
+        tabbedPane.setMnemonicAt(1, KeyEvent.VK_Z);
+        tabbedPane.setMnemonicAt(2, KeyEvent.VK_R);
         refreshRecipes();
     }
 
@@ -87,11 +85,11 @@ public class MainFrame extends javax.swing.JFrame {
         finishedCheckBox = new javax.swing.JCheckBox();
         listScrollPane = new javax.swing.JScrollPane();
         itemList = new javax.swing.JList();
-        addItemButton = new javax.swing.JButton();
-        updateItem = new javax.swing.JButton();
+        listAddButton = new javax.swing.JButton();
+        listEditButton = new javax.swing.JButton();
         listPurchasedButton = new javax.swing.JButton();
         listRemoveButton = new javax.swing.JButton();
-        dateField = new com.alee.extended.date.WebDateField();
+        webDateField2 = new com.alee.extended.date.WebDateField();
         addListButton = new javax.swing.JButton();
         recipePanel = new javax.swing.JPanel();
         searchField = new javax.swing.JTextField();
@@ -173,7 +171,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGap(15, 15, 15)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
-                .addComponent(productScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 415, Short.MAX_VALUE)
+                .addComponent(productScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 369, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -191,35 +189,20 @@ public class MainFrame extends javax.swing.JFrame {
         listDateLabel.setText("Dátum expirácie");
 
         purchasedCheckBox.setText("Nakúpené");
-        purchasedCheckBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                purchasedCheckBoxActionPerformed(evt);
-            }
-        });
 
         listStatusLabel.setText("Stav");
 
         finishedCheckBox.setText("Zoznam je úplný");
 
         itemList.setModel(new ItemListModel(shoppingList));
-        itemList.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                itemListMouseClicked(evt);
-            }
-        });
         listScrollPane.setViewportView(itemList);
 
-        addItemButton.setText("Pridať...");
-        addItemButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addItemButtonActionPerformed(evt);
-            }
-        });
+        listAddButton.setText("Pridať...");
 
-        updateItem.setText("Upraviť...");
-        updateItem.addActionListener(new java.awt.event.ActionListener() {
+        listEditButton.setText("Upraviť...");
+        listEditButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                updateItemActionPerformed(evt);
+                listEditButtonActionPerformed(evt);
             }
         });
 
@@ -231,18 +214,8 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         listRemoveButton.setText("Odstrániť");
-        listRemoveButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                listRemoveButtonActionPerformed(evt);
-            }
-        });
 
         addListButton.setText("Pridať zoznam...");
-        addListButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addListButtonActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout listsPanelLayout = new javax.swing.GroupLayout(listsPanel);
         listsPanel.setLayout(listsPanelLayout);
@@ -260,8 +233,8 @@ public class MainFrame extends javax.swing.JFrame {
                         .addGap(16, 16, 16)
                         .addGroup(listsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(listsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(updateItem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(addItemButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(listEditButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(listAddButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(listsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(listPurchasedButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(listRemoveButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
@@ -281,7 +254,7 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(listDateLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dateField, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(webDateField2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         listsPanelLayout.setVerticalGroup(
@@ -296,7 +269,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(listNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(listNameLabel)
                     .addComponent(listDateLabel)
-                    .addComponent(dateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(webDateField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(listsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(purchasedCheckBox)
@@ -306,9 +279,9 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(listsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(listScrollPane)
                     .addGroup(listsPanelLayout.createSequentialGroup()
-                        .addComponent(addItemButton)
+                        .addComponent(listAddButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(updateItem)
+                        .addComponent(listEditButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(listPurchasedButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -391,7 +364,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(recipeUrlTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addRecipeButton))
                 .addGap(25, 25, 25)
-                .addComponent(recipeScrollPane))
+                .addComponent(recipeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE))
         );
 
         tabbedPane.addTab("Recepty", recipePanel);
@@ -408,7 +381,7 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 671, Short.MAX_VALUE)
+            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -418,88 +391,26 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addRecipeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRecipeButtonActionPerformed
-        try {
-            RecipeParser.fetchFromUrl(recipeUrlTextField.getText());
-            ((RecipeTableModel) recipeTable.getModel()).refresh();
-        } catch (IOException | UnsupportedOperationException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_addRecipeButtonActionPerformed
+    public ShoppingList addSelectedList() {
+        ShoppingList selectedList = (ShoppingList) listComboBox.getSelectedItem();
+        return selectedList;
+    }
 
-    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_searchButtonActionPerformed
-
-    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
-        if (evt.getClickCount() == 2) {
-            int row = recipeTable.getSelectedRow();
-            Recipe recipe = ((RecipeTableModel) recipeTable.getModel()).getRecipeAt(row);
-            RecipePanel recipeDetailPanel = new RecipePanel(recipe);
-            String recipeName = recipe.getName();
-            int length = recipeName.length();
-            tabbedPane.addTab(
-                    (length > 16) ? (recipeName.substring(0, length - 3) + "...") : recipeName, recipeDetailPanel);
-            tabbedPane.setSelectedComponent(recipeDetailPanel);
-        }
-    }//GEN-LAST:event_recipeTableMouseClicked
-
-    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_searchFieldActionPerformed
-
-    private void addListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addListButtonActionPerformed
-        // TODO add your handling code here:
-        ShoppingList shoppingList;
-        if (listNameField.getText() != null) {
-            shoppingList = new ShoppingList();
-            shoppingList.setName(listNameField.getText());
-            shoppingList.setExpiry(dateField.getDate());
-            shoppingListDao.store(shoppingList);
-        }
-    }//GEN-LAST:event_addListButtonActionPerformed
-
-    private void listRemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listRemoveButtonActionPerformed
-        Item item = getSelectedItem();
-        itemDao.delete(item);
-    }//GEN-LAST:event_listRemoveButtonActionPerformed
-
-    private void listPurchasedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listPurchasedButtonActionPerformed
-        // TODO add your handling code here:
-
-        Item item = getSelectedItem();
-        itemDao.done(item);
-    }//GEN-LAST:event_listPurchasedButtonActionPerformed
-
-    private void updateItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateItemActionPerformed
-        // TODO add your handling code here:
-        Item item = getSelectedItem();
-        ItemDialog productDialog;
-        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
-        productDialog = new ItemDialog(item, shoppingList, this, true);
-        productDialog.setVisible(true);
-    }//GEN-LAST:event_updateItemActionPerformed
-
-    private void addItemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemButtonActionPerformed
-        // TODO add your handling code here:
-        ItemDialog productDialog;
-        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
-        productDialog = new ItemDialog(shoppingList, this, true);
-        productDialog.setVisible(true);
-
-    }//GEN-LAST:event_addItemButtonActionPerformed
-
-    private void itemListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemListMouseClicked
-        // TODO add your handling code here:
-        selectedItem = itemList.getSelectedIndex();
-    }//GEN-LAST:event_itemListMouseClicked
-
-    private void purchasedCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchasedCheckBoxActionPerformed
+    private void listNameFieldActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
         ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
-        shoppingList.setStatus(Status.fromInt(3));
+        searchField.setText(shoppingList.getName());
+    }
 
-    }//GEN-LAST:event_purchasedCheckBoxActionPerformed
+    private void listAddButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+    
+
+    }
+    
+    private void listEditButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listEditButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_listEditButtonActionPerformed
 
     private void listComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listComboBoxActionPerformed
         // TODO add your handling code here:
@@ -507,22 +418,29 @@ public class MainFrame extends javax.swing.JFrame {
         ItemListModel model = (ItemListModel) itemList.getModel();
         model.refresh(shoppingList);
 
+
     }//GEN-LAST:event_listComboBoxActionPerformed
 
-    private void searchProductButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchProductButtonActionPerformed
-        searchProductField.setBackground(Color.white);
-        String query = searchProductField.getText();
-        List<Product> products = productDao.find(query);
-        ProductListModel productListModel = (ProductListModel) productList.getModel();
-        if (products.isEmpty()) {
-            searchProductField.setBackground(new Color(192, 57, 43));
-        } else {
-            productListModel.refreshList(products);
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void addRecipeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRecipeButtonActionPerformed
+        try {
+            RecipeParser.fetchFromUrl(recipeUrlTextField.getText());
+            ((RecipeTableModel)recipeTable.getModel()).refresh();
+        } catch (IOException | UnsupportedOperationException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_searchProductButtonActionPerformed
+    }//GEN-LAST:event_addRecipeButtonActionPerformed
+
+    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchFieldActionPerformed
 
     private void searchProductFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchProductFieldActionPerformed
-
+    
     }//GEN-LAST:event_searchProductFieldActionPerformed
 
     private void productListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productListMouseClicked
@@ -536,25 +454,43 @@ public class MainFrame extends javax.swing.JFrame {
             ListDialog listDialog = new ListDialog(product, this, true);
             listDialog.setVisible(true);
         }
+
     }//GEN-LAST:event_productListMouseClicked
 
-    public ShoppingList addSelectedList() {
-        ShoppingList selectedList = (ShoppingList) listComboBox.getSelectedItem();
-        return selectedList;
-    }
-
-    private void listNameFieldActionPerformed(java.awt.event.ActionEvent evt) {
+    private void listPurchasedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listPurchasedButtonActionPerformed
         // TODO add your handling code here:
-        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
-        searchField.setText(shoppingList.getName());
-    }
 
+    }//GEN-LAST:event_listPurchasedButtonActionPerformed
 
-    private Item getSelectedItem() {
-        // TODO add your handling code here:
-        Item item = (Item) ((ListModel) itemList.getModel().getElementAt(selectedItem));
-        return item;
-    }
+    private void searchProductButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchProductButtonActionPerformed
+        searchProductField.setBackground(Color.white);
+        String query = searchProductField.getText();
+        List<Product> products = productDao.find(query);
+        ProductListModel productListModel = (ProductListModel) productList.getModel();
+        if (products.isEmpty())
+            searchProductField.setBackground(new Color(192, 57, 43));
+        else
+            productListModel.refreshList(products);
+    }//GEN-LAST:event_searchProductButtonActionPerformed
+
+    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
+        if (evt.getClickCount() == 2){
+            int row = recipeTable.getSelectedRow();
+            Recipe recipe = ((RecipeTableModel) recipeTable.getModel()).getRecipeAt(row);
+            RecipePanel recipeDetailPanel = new RecipePanel(recipe);
+            String recipeName = recipe.getName();
+            tabbedPane.addTab(
+                    recipeName.substring(0, (recipeName.length() > 16) ? 16 : recipeName.length()) + "...",
+                    recipeDetailPanel
+            );
+            int tabIndex = tabbedPane.getTabCount() - 1;
+            for (int i = 3; i < tabbedPane.getTabCount(); i++)
+                tabbedPane.setMnemonicAt(i, 46+i);
+            
+            tabbedPane.setTabComponentAt(tabIndex, new ButtonTabComponent(tabbedPane));
+            tabbedPane.setSelectedComponent(recipeDetailPanel);
+        }
+    }//GEN-LAST:event_recipeTableMouseClicked
 
     /**
      * @param args the command line arguments
@@ -572,19 +508,19 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addItemButton;
     private javax.swing.JButton addListButton;
     private javax.swing.JButton addRecipeButton;
     private javax.swing.JLabel addRecipeLabel;
-    private com.alee.extended.date.WebDateField dateField;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JCheckBox finishedCheckBox;
     private javax.swing.JList itemList;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JButton listAddButton;
     private javax.swing.JComboBox<ShoppingList> listComboBox;
     private javax.swing.JLabel listDateLabel;
+    private javax.swing.JButton listEditButton;
     private javax.swing.JTextField listNameField;
     private javax.swing.JLabel listNameLabel;
     private javax.swing.JButton listPurchasedButton;
@@ -607,6 +543,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField searchProductField;
     private javax.swing.JLabel searchRecipeLabel;
     private javax.swing.JTabbedPane tabbedPane;
-    private javax.swing.JButton updateItem;
+    private com.alee.extended.date.WebDateField webDateField2;
     // End of variables declaration//GEN-END:variables
 }
