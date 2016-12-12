@@ -26,6 +26,5 @@ public class GenericComboBoxModel<T extends Entity> extends DefaultComboBoxModel
         shoppingLists.forEach((shoppingList) -> {
             addElement(shoppingList);
         });
-        
     }
 }

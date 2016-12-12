@@ -1,14 +1,12 @@
-*.class
 
-# Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
 # Package Files #
 *.jar
 *.war
 *.ear
-
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+
 hs_err_pid*
 
 # Vagrant folder and Vagrantfile
@@ -18,4 +16,4 @@ Vagrantfile
 .idea/
 *.iml
 /Homer/nbproject/
-/Homer/null/
+/sk.upjs.paz1c_Homer_jar_0.1/target/

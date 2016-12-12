@@ -2,14 +2,12 @@ package sk.upjs.paz1c.homer;
 
 import java.awt.Color;
 import java.awt.Frame;
-import java.util.ArrayList;
 import java.util.List;
 import sk.upjs.paz1c.homer.dao.ItemDao;
 import sk.upjs.paz1c.homer.dao.ProductDao;
 import sk.upjs.paz1c.homer.entity.Item;
 import sk.upjs.paz1c.homer.entity.Product;
 import sk.upjs.paz1c.homer.entity.ShoppingList;
-import sk.upjs.paz1c.homer.model.ItemListModel;
 
 /**
  *
@@ -18,7 +16,7 @@ import sk.upjs.paz1c.homer.model.ItemListModel;
 public class ItemDialog extends javax.swing.JDialog {
 
     private Item item;
-    private ShoppingList shoppingList = new ShoppingList();
+    private ShoppingList shoppingList;
     private final ItemDao itemDao = ObjectFactory.INSTANCE.getDao(Item.class);
     private final ProductDao productDao = ObjectFactory.INSTANCE.getDao(Product.class);
 
@@ -34,12 +32,10 @@ public class ItemDialog extends javax.swing.JDialog {
     public ItemDialog(Item item, ShoppingList shoppingList, Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-
         updateLabel.setText("Upraviť");
         this.item = item;
-        this.item.setListId(shoppingList.getId());
+        this.item.setId(shoppingList.getId());
         itemNameTextField.setText(item.getName());
-        this.shoppingList=shoppingList;
 
     }
 
@@ -48,9 +44,8 @@ public class ItemDialog extends javax.swing.JDialog {
         initComponents();
         updateLabel.setText("Pridať");
         this.item = null;
-        this.shoppingList=shoppingList;
-        
-        
+        this.item.setId(shoppingList.getId());
+        itemNameTextField.setText(item.getName());
 
     }
 
@@ -95,24 +90,22 @@ public class ItemDialog extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(55, 55, 55)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
-                        .addComponent(updateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel2))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(amountSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(itemNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 297, Short.MAX_VALUE))))
+                                .addComponent(amountSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 121, Short.MAX_VALUE)
+                                .addComponent(okButton))
+                            .addComponent(itemNameTextField)))
+                    .addComponent(updateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -123,17 +116,21 @@ public class ItemDialog extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(16, 16, 16))
-                    .addComponent(updateLabel, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(9, 9, 9)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(itemNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(updateLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jLabel1))
+                    .addComponent(itemNameTextField, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(amountSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(okButton))
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(amountSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(okButton))
+                    .addComponent(jLabel2))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
 
         pack();
@@ -147,18 +144,13 @@ public class ItemDialog extends javax.swing.JDialog {
         if (item != null) {
             //update item
             item.setName(string);
-            
-            item.setListId(shoppingList.getId());
-            
-            String amount = (""+amountSpinner.getValue());
-            item.setAmount((Float.parseFloat(amount)));
+            item.setAmount(
+                    (Float) amountSpinner.getValue());
             itemDao.store(item);
             this.dispose();
-            
         } else {
             //add item
-            List<Product> products = new ArrayList<>();
-            products = productDao.find(string);
+            List<Product> products = productDao.find(string);
             if (products.isEmpty()) {
                 //searched product doesnt exist
                 itemNameTextField.setBackground(new Color(192, 57, 43));
@@ -167,11 +159,10 @@ public class ItemDialog extends javax.swing.JDialog {
             if (!(products.isEmpty())) {
                 //add product to list as item
                 item = new Item();
-                item.setProduct_id(products.get(0).getId());
+                item.setId(products.get(0).getId());
+                item.setListId(this.shoppingList.getId());
                 item.setName(string);
-                item.setListId(shoppingList.getId());
-                String amount = (""+ amountSpinner.getValue());
-                item.setAmount((Float.parseFloat(amount)));
+                item.setAmount((Float) amountSpinner.getValue());
                 itemDao.store(item);
                 this.dispose();
             }

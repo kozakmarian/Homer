@@ -7,12 +7,12 @@ import sk.upjs.paz1c.homer.ObjectFactory;
 import sk.upjs.paz1c.homer.dao.ProductDao;
 import sk.upjs.paz1c.homer.entity.Product;
 
+
 /**
  *
  * @author ntb
  */
 public class ProductListModel extends AbstractListModel<Product> {
-
     private List<Product> products = new ArrayList<>();
     private ProductDao productDao;
 
@@ -23,7 +23,7 @@ public class ProductListModel extends AbstractListModel<Product> {
 
     @Override
     public int getSize() {
-        return (products != null) ? products.size() : 0;
+        return (products!= null) ? products.size() : 0;
     }
 
     @Override
@@ -37,6 +37,9 @@ public class ProductListModel extends AbstractListModel<Product> {
         this.products = products;
         fireIntervalAdded(this, 0, products.size());
 
+      
     }
+    
+    
 
 }

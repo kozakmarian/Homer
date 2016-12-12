@@ -1,6 +1,5 @@
 package sk.upjs.paz1c.homer.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractListModel;
 import sk.upjs.paz1c.homer.ObjectFactory;
@@ -14,14 +13,12 @@ import sk.upjs.paz1c.homer.entity.ShoppingList;
  */
 public class ItemListModel extends AbstractListModel<Item> {
 
-    private ShoppingList shoppingList = new ShoppingList();
-    private List<Item> items = new ArrayList<>();
+    private ShoppingList shoppingList;
+    private List<Item> items;
     private final ItemDao itemDao;
 
     public ItemListModel(ShoppingList shoppingList) {
         itemDao = ObjectFactory.INSTANCE.getDao(Item.class);
-       
-        
 
     }
 
@@ -37,13 +34,11 @@ public class ItemListModel extends AbstractListModel<Item> {
     }
 
     public void refresh(ShoppingList shoppingList) {
-        if (items != null) {
         items.clear();
         items = itemDao.findAll(shoppingList);
         fireIntervalAdded(this, 0, items.size());
-            fireContentsChanged(this,0, items.size());
-        //refresh
-        }
+
+        //refresh?
     }
 
 }

@@ -1,5 +1,6 @@
 package sk.upjs.paz1c.homer;
 
+import ch.qos.logback.core.CoreConstants;
 import com.alee.laf.WebLookAndFeel;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,10 +10,7 @@ import java.util.List;
 import javax.swing.ListModel;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sk.upjs.paz1c.homer.dao.ItemDao;
@@ -37,7 +35,7 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * Creates new form MainFrame
      */
-    private ShoppingList shoppingList = new ShoppingList();
+    private ShoppingList shoppingList;
     private final RecipeDao recipeDao = ObjectFactory.INSTANCE.getDao(Recipe.class);
     private final ItemDao itemDao = ObjectFactory.INSTANCE.getDao(Item.class);
     private final ProductDao productDao = ObjectFactory.INSTANCE.getDao(Product.class);
@@ -54,40 +52,14 @@ public class MainFrame extends javax.swing.JFrame {
         int height = gd.getDisplayMode().getHeight() * 2 / 2;
         windowSize = new Dimension(width, height);
         initComponents();
-
+       
         refreshRecipes();
-        refreshProducts(20);
+        
     }
 
     private void refreshRecipes() {
         RecipeTableModel model = (RecipeTableModel) recipeTable.getModel();
         model.refresh();
-    }
-
-    private void refreshProducts(int size) {
-        List<Product> products = productDao.list();
-        Set<Product> setProducts = new HashSet<Product>();
-        setProducts.addAll(products);
-        List<Product> result = new ArrayList<Product>();
-        int i = 0;
-        for (Product add : setProducts) {
-            if (i < size) {
-                result.add(add);
-            }
-        }
-        ProductListModel model = (ProductListModel) productList.getModel();
-        model.refreshList(result);
-    }
-
-    private void refreshItems() {
-        ItemListModel model = (ItemListModel) itemList.getModel();
-        model.refresh(shoppingList);
-
-    }
-
-    private void refreshComboBox() {
-        ListComboBoxModel listComboBoxModel = (ListComboBoxModel) listComboBox.getModel();
-        listComboBoxModel.refresh();
     }
 
     /**
@@ -105,6 +77,7 @@ public class MainFrame extends javax.swing.JFrame {
         productScrollPane = new javax.swing.JScrollPane();
         productList = new javax.swing.JList<>();
         searchProductField = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
         searchProductButton = new javax.swing.JButton();
         listsPanel = new javax.swing.JPanel();
         listComboBox = new javax.swing.JComboBox<>();
@@ -161,6 +134,8 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setText("//po dvojkliku na polozku sa objavi? dialog na pridanie polozky do zoznamu");
+
         searchProductButton.setText("Hľadať");
         searchProductButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,19 +146,22 @@ public class MainFrame extends javax.swing.JFrame {
         javax.swing.GroupLayout productPanelLayout = new javax.swing.GroupLayout(productPanel);
         productPanel.setLayout(productPanelLayout);
         productPanelLayout.setHorizontalGroup(
-            productPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            productPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, productPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(searchProductField)
+                .addGap(18, 18, 18)
+                .addComponent(searchProductButton)
+                .addGap(41, 41, 41))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, productPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addGap(191, 191, 191))
             .addGroup(productPanelLayout.createSequentialGroup()
-                .addGroup(productPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, productPanelLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchProductField)
-                        .addGap(18, 18, 18)
-                        .addComponent(searchProductButton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(productPanelLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(productScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE)))
+                .addGap(25, 25, 25)
+                .addComponent(productScrollPane)
                 .addContainerGap())
         );
         productPanelLayout.setVerticalGroup(
@@ -194,8 +172,10 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(searchProductField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchProductButton))
+                .addGap(15, 15, 15)
+                .addComponent(jLabel3)
                 .addGap(18, 18, 18)
-                .addComponent(productScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
+                .addComponent(productScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -430,7 +410,7 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 627, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -439,6 +419,42 @@ public class MainFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    public ShoppingList addSelectedList() {
+        ShoppingList selectedList = (ShoppingList) listComboBox.getSelectedItem();
+        return selectedList;
+    }
+
+    private void listNameFieldActionPerformed(java.awt.event.ActionEvent evt) {
+        // TODO add your handling code here:
+        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
+        searchField.setText(shoppingList.getName());
+    }
+
+
+    private void updateItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateItemActionPerformed
+        // TODO add your handling code here:
+        Item item = getSelectedItem();
+        ItemDialog productDialog;
+        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
+        productDialog = new ItemDialog(item, shoppingList, this, true);
+        productDialog.setVisible(true);
+
+    }//GEN-LAST:event_updateItemActionPerformed
+
+    private void listComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listComboBoxActionPerformed
+        // TODO add your handling code here:
+        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
+        ItemListModel model = (ItemListModel) itemList.getModel();
+        model.refresh(shoppingList);
+
+
+    }//GEN-LAST:event_listComboBoxActionPerformed
+
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_searchButtonActionPerformed
 
     private void addRecipeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRecipeButtonActionPerformed
         try {
@@ -449,95 +465,34 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_addRecipeButtonActionPerformed
 
-    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_searchButtonActionPerformed
-
-    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
-        if (evt.getClickCount() == 2) {
-            int row = recipeTable.getSelectedRow();
-            Recipe recipe = ((RecipeTableModel) recipeTable.getModel()).getRecipeAt(row);
-            RecipePanel recipeDetailPanel = new RecipePanel(recipe);
-            String recipeName = recipe.getName();
-            int length = recipeName.length();
-            tabbedPane.addTab(
-                    (length > 16) ? (recipeName.substring(0, length - 3) + "...") : recipeName, recipeDetailPanel);
-            tabbedPane.setSelectedComponent(recipeDetailPanel);
-        }
-    }//GEN-LAST:event_recipeTableMouseClicked
-
     private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_searchFieldActionPerformed
 
-    private void addListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addListButtonActionPerformed
-        // TODO add your handling code here:
-        ShoppingList shoppingList;
-        if (listNameField.getText() != null) {
-            shoppingList = new ShoppingList();
-            shoppingList.setName(listNameField.getText());
-            shoppingList.setExpiry(dateField.getDate());
-            shoppingListDao.store(shoppingList);
-            refreshComboBox();
-        }
-    }//GEN-LAST:event_addListButtonActionPerformed
+    private void searchProductFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchProductFieldActionPerformed
 
-    private void listRemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listRemoveButtonActionPerformed
-        Item item = getSelectedItem();
-        itemDao.delete(item);
-        refreshItems();
-    }//GEN-LAST:event_listRemoveButtonActionPerformed
+    }//GEN-LAST:event_searchProductFieldActionPerformed
+
+    private void productListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productListMouseClicked
+        // TODO add your handling code here:
+
+        if (evt.getClickCount() == 2) {
+            int riadok = productList.getSelectedIndex();
+            Product product;
+            product = (Product) ((ListModel) productList.getModel()).getElementAt(riadok);
+
+            ListDialog listDialog = new ListDialog(product, this, true);
+            listDialog.setVisible(true);
+        }
+
+    }//GEN-LAST:event_productListMouseClicked
 
     private void listPurchasedButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listPurchasedButtonActionPerformed
         // TODO add your handling code here:
 
         Item item = getSelectedItem();
-        item.setStatus(Status.DONE);
-        refreshItems();
-
+        itemDao.done(item);
     }//GEN-LAST:event_listPurchasedButtonActionPerformed
-
-    private void updateItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateItemActionPerformed
-        // TODO add your handling code here:
-        Item item = getSelectedItem();
-        ItemDialog productDialog;
-        shoppingList = addSelectedList();
-        productDialog = new ItemDialog(item, shoppingList, this, true);
-        productDialog.setVisible(true);
-        refreshItems();
-    }//GEN-LAST:event_updateItemActionPerformed
-
-    private void addItemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemButtonActionPerformed
-        // TODO add your handling code here:
-        ItemDialog productDialog;
-
-        shoppingList = addSelectedList();
-        productDialog = new ItemDialog(shoppingList, this, true);
-        productDialog.setVisible(true);
-        refreshItems();
-
-    }//GEN-LAST:event_addItemButtonActionPerformed
-
-    private void itemListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemListMouseClicked
-        // TODO add your handling code here:
-        selectedItem = itemList.getSelectedIndex();
-    }//GEN-LAST:event_itemListMouseClicked
-
-    private void purchasedCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchasedCheckBoxActionPerformed
-        // TODO add your handling code here:
-        shoppingList = addSelectedList();
-        shoppingList.setStatus(Status.fromInt(3));
-
-    }//GEN-LAST:event_purchasedCheckBoxActionPerformed
-
-    private void listComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listComboBoxActionPerformed
-        // TODO add your handling code here:
-        shoppingList = addSelectedList();
-        System.out.println(shoppingList.getName());
-       
-                refreshItems();
-
-    }//GEN-LAST:event_listComboBoxActionPerformed
 
     private void searchProductButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchProductButtonActionPerformed
         searchProductField.setBackground(Color.white);
@@ -551,40 +506,60 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_searchProductButtonActionPerformed
 
-    private void searchProductFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchProductFieldActionPerformed
-
-    }//GEN-LAST:event_searchProductFieldActionPerformed
-
-    private void productListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productListMouseClicked
-        // add product to shopping list
-      
-
+    private void recipeTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_recipeTableMouseClicked
         if (evt.getClickCount() == 2) {
-             
-            int riadok = productList.getSelectedIndex();
-            Product product;
-            product = (Product) ((ListModel) productList.getModel()).getElementAt(riadok);
-
-            ListDialog listDialog = new ListDialog(product, this, true);
-            listDialog.setVisible(true);
-            refreshComboBox();
+            int row = recipeTable.getSelectedRow();
+            Recipe recipe = ((RecipeTableModel) recipeTable.getModel()).getRecipeAt(row);
+            RecipePanel recipeDetailPanel = new RecipePanel(recipe);
+            String recipeName = recipe.getName();
+            tabbedPane.addTab(recipeName.substring(0, (recipeName.length() > 16) ? 16 : recipeName.length()) + "...", recipeDetailPanel);
+            tabbedPane.setSelectedComponent(recipeDetailPanel);
         }
-    }//GEN-LAST:event_productListMouseClicked
+    }//GEN-LAST:event_recipeTableMouseClicked
 
-    public ShoppingList addSelectedList() {
-        //return selected shopping list from combobox
-        ShoppingList selectedList = (ShoppingList) listComboBox.getSelectedItem();
-        return selectedList;
-    }
+    private void itemListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemListMouseClicked
+        // TODO add your handling code here:
+        selectedItem = itemList.getSelectedIndex();
+    }//GEN-LAST:event_itemListMouseClicked
 
-    //private void listNameFieldActionPerformed(java.awt.event.ActionEvent evt) {
-    //   // TODO add your handling code here:
-    //  ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
-    // searchField.setText(shoppingList.getName());
-    //}
+    private void listRemoveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listRemoveButtonActionPerformed
+        Item item = getSelectedItem();
+        itemDao.delete(item);
+
+    }//GEN-LAST:event_listRemoveButtonActionPerformed
+
+    private void purchasedCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_purchasedCheckBoxActionPerformed
+        // TODO add your handling code here:
+        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
+        shoppingList.setStatus(Status.DONE);
+
+
+    }//GEN-LAST:event_purchasedCheckBoxActionPerformed
+
+    private void addListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addListButtonActionPerformed
+        // TODO add your handling code here:
+        ShoppingList shoppingList;
+        if (listNameField.getText() != null) {
+            shoppingList = new ShoppingList();
+            shoppingList.setName(listNameField.getText());
+            shoppingList.setExpiry(dateField.getDate());
+            shoppingListDao.store(shoppingList);
+        }
+    }//GEN-LAST:event_addListButtonActionPerformed
+
+    private void addItemButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemButtonActionPerformed
+        // TODO add your handling code here:
+        ItemDialog productDialog;
+        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
+        productDialog = new ItemDialog(shoppingList, this, true);
+        productDialog.setVisible(true);
+
+
+    }//GEN-LAST:event_addItemButtonActionPerformed
+
     private Item getSelectedItem() {
-        // return selected item from shopping list
-        Item item = (Item) (itemList.getModel().getElementAt(selectedItem));
+        // TODO add your handling code here:
+        Item item = (Item) ((ListModel) itemList.getModel().getElementAt(selectedItem));
         return item;
     }
 
@@ -599,6 +574,7 @@ public class MainFrame extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new MainFrame().setVisible(true);
+               
             }
         });
     }
@@ -614,6 +590,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JCheckBox finishedCheckBox;
     private javax.swing.JList itemList;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JComboBox<ShoppingList> listComboBox;
     private javax.swing.JLabel listDateLabel;
     private javax.swing.JTextField listNameField;
