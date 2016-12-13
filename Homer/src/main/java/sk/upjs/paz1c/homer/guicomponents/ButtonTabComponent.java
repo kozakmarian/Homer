@@ -28,7 +28,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package sk.upjs.paz1c.homer;
+package sk.upjs.paz1c.homer.guicomponents;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;

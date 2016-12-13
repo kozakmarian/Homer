@@ -1,4 +1,4 @@
-package sk.upjs.paz1c.homer;
+package sk.upjs.paz1c.homer.guicomponents;
 
 import com.alee.laf.label.WebLabel;
 import java.awt.Component;

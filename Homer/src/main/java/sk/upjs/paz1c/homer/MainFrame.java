@@ -1,5 +1,10 @@
 package sk.upjs.paz1c.homer;
 
+import sk.upjs.paz1c.homer.guicomponents.RecipePanel;
+import sk.upjs.paz1c.homer.guicomponents.ButtonTabComponent;
+import sk.upjs.paz1c.homer.guicomponents.TimeTableCellRenderer;
+import sk.upjs.paz1c.homer.guicomponents.PortionsTableCellRenderer;
+import sk.upjs.paz1c.homer.guicomponents.ImageTableCellRenderer;
 import com.alee.laf.WebLookAndFeel;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -11,6 +16,9 @@ import javax.swing.ListModel;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 import sk.upjs.paz1c.homer.dao.ItemDao;
 import sk.upjs.paz1c.homer.dao.ProductDao;
 import sk.upjs.paz1c.homer.dao.RecipeDao;
@@ -46,7 +54,23 @@ public class MainFrame extends javax.swing.JFrame {
         int width = gd.getDisplayMode().getWidth() * 2 / 3;
         int height = gd.getDisplayMode().getHeight() * 2 / 2;
         windowSize = new Dimension(width, height);
+        
+        
         initComponents();
+        recipeTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        
+        recipeTable.setRowHeight(40);
+        int[] widths = {69, 300, 70, 70, 100, 70};
+        TableColumnModel columnModel = recipeTable.getColumnModel();
+        for (int i = 0; i < recipeTable.getColumnCount() - 1; i++) {
+            columnModel.getColumn(i).setMinWidth(widths[i]);
+            columnModel.getColumn(i).setMaxWidth(widths[i]);
+        }
+        columnModel.getColumn(
+                ((RecipeTableModel)(recipeTable.getModel())).COLUMN_INDEX_NAME
+        ).setMaxWidth(Integer.MAX_VALUE);
+        recipeTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_P);
         tabbedPane.setMnemonicAt(1, KeyEvent.VK_Z);
         tabbedPane.setMnemonicAt(2, KeyEvent.VK_R);
@@ -94,7 +118,21 @@ public class MainFrame extends javax.swing.JFrame {
         recipePanel = new javax.swing.JPanel();
         searchField = new javax.swing.JTextField();
         recipeScrollPane = new javax.swing.JScrollPane();
-        recipeTable = new javax.swing.JTable();
+        recipeTable = new javax.swing.JTable() {
+            @Override
+            public TableCellRenderer getCellRenderer(int row, int column) {
+                switch(column) {
+                    case RecipeTableModel.COLUMN_INDEX_IMAGE:
+                    return new ImageTableCellRenderer();
+                    case RecipeTableModel.COLUMN_INDEX_COOKING:
+                    case RecipeTableModel.COLUMN_INDEX_PREP:
+                    return new TimeTableCellRenderer();
+                    case RecipeTableModel.COLUMN_INDEX_PORTIONS:
+                    return new PortionsTableCellRenderer();
+                    default: return super.getCellRenderer(row, column);
+                }
+            }
+        };
         searchButton = new javax.swing.JButton();
         searchRecipeLabel = new javax.swing.JLabel();
         addRecipeLabel = new javax.swing.JLabel();
@@ -297,6 +335,11 @@ public class MainFrame extends javax.swing.JFrame {
                 searchFieldActionPerformed(evt);
             }
         });
+        searchField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                searchFieldKeyPressed(evt);
+            }
+        });
 
         recipeTable.setModel(new RecipeTableModel());
         recipeTable.setColumnSelectionAllowed(true);
@@ -309,6 +352,11 @@ public class MainFrame extends javax.swing.JFrame {
         recipeTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         searchButton.setText("OK");
+        searchButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                searchButtonMouseClicked(evt);
+            }
+        });
         searchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchButtonActionPerformed(evt);
@@ -491,6 +539,25 @@ public class MainFrame extends javax.swing.JFrame {
             tabbedPane.setSelectedComponent(recipeDetailPanel);
         }
     }//GEN-LAST:event_recipeTableMouseClicked
+
+    private void searchButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_searchButtonMouseClicked
+        this.searchForRecipeFromField();
+    }//GEN-LAST:event_searchButtonMouseClicked
+
+    private void searchForRecipeFromField() {
+        String query = searchField.getText();
+        RecipeTableModel model = (RecipeTableModel)recipeTable.getModel();
+        if (!query.trim().equals("")) {
+            model.searchFor(searchField.getText());
+        } else {
+            model.refresh();
+        }
+    }
+    
+    private void searchFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchFieldKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER)
+            this.searchForRecipeFromField();
+    }//GEN-LAST:event_searchFieldKeyPressed
 
     /**
      * @param args the command line arguments

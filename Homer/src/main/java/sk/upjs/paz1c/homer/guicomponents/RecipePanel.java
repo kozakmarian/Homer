@@ -1,29 +1,26 @@
-package sk.upjs.paz1c.homer;
+package sk.upjs.paz1c.homer.guicomponents;
 
+import sk.upjs.paz1c.homer.guicomponents.RecipeItemListCellRenderer;
 import com.alee.extended.image.DisplayType;
 import com.alee.extended.image.WebImage;
 import com.alee.laf.label.WebLabel;
 import com.alee.laf.list.WebList;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollPane;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
-import javax.swing.GroupLayout;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
+import sk.upjs.paz1c.homer.FileStorage;
 import sk.upjs.paz1c.homer.entity.Recipe;
 import sk.upjs.paz1c.homer.model.RecipeItemListModel;
 

@@ -425,6 +425,7 @@
             <Component class="javax.swing.JTextField" name="searchField">
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchFieldActionPerformed"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="searchFieldKeyPressed"/>
               </Events>
             </Component>
             <Container class="javax.swing.JScrollPane" name="recipeScrollPane">
@@ -450,6 +451,9 @@
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="recipeTableMouseClicked"/>
                   </Events>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable() {&#xa;    @Override&#xa;    public TableCellRenderer getCellRenderer(int row, int column) {&#xa;        switch(column) {&#xa;            case RecipeTableModel.COLUMN_INDEX_IMAGE:&#xa;                return new ImageTableCellRenderer();&#xa;            case RecipeTableModel.COLUMN_INDEX_COOKING:&#xa;            case RecipeTableModel.COLUMN_INDEX_PREP:&#xa;                return new TimeTableCellRenderer();&#xa;            case RecipeTableModel.COLUMN_INDEX_PORTIONS:&#xa;                return new PortionsTableCellRenderer();&#xa;            default: return super.getCellRenderer(row, column);&#xa;        }&#xa;    }&#xa;}"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
@@ -458,6 +462,7 @@
                 <Property name="text" type="java.lang.String" value="OK"/>
               </Properties>
               <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="searchButtonMouseClicked"/>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchButtonActionPerformed"/>
               </Events>
             </Component>

@@ -11,7 +11,6 @@ public class Recipe extends Entity {
     private String instructions;
     private String url;
     private List<Item> ingredients;
-    private String category;
 
     public Integer getPreparation() {
         return preparation;
@@ -67,13 +66,5 @@ public class Recipe extends Entity {
 
     public void setIngredients(List<Item> ingredients) {
         this.ingredients = ingredients;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }    
 }
