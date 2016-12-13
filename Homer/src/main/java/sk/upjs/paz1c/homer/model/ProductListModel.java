@@ -36,7 +36,5 @@ public class ProductListModel extends AbstractListModel<Product> {
         this.products.clear();
         this.products = products;
         fireIntervalAdded(this, 0, products.size());
-
     }
-
 }

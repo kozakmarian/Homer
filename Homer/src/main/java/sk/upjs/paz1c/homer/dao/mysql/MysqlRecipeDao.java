@@ -50,6 +50,7 @@ public class MysqlRecipeDao extends MysqlGenericDao<Recipe> implements RecipeDao
      */
     @Override
     public List<Recipe> find(String name) {
-        return jdbcTemplate.query("SELECT * FROM " + TABLE_NAME + " WHERE name = " + name, rowMapper);
+        Object[] params = {"%"+name+"%"};
+        return jdbcTemplate.query("SELECT * FROM " + TABLE_NAME + " WHERE name LIKE ?", params, rowMapper);
     }    
 }
