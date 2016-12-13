@@ -37,13 +37,13 @@ public class ItemListModel extends AbstractListModel<Item> {
     }
 
     public void refresh(ShoppingList shoppingList) {
-        if (items != null) {
+      
         items.clear();
         items = itemDao.findAll(shoppingList);
         fireIntervalAdded(this, 0, items.size());
             fireContentsChanged(this,0, items.size());
         //refresh
-        }
+        
     }
 
 }

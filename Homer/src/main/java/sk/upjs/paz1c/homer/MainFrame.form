@@ -183,12 +183,12 @@
                               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="listEditButton" max="32767" attributes="0"/>
-                                      <Component id="listAddButton" max="32767" attributes="0"/>
+                                      <Component id="updateItem" max="32767" attributes="0"/>
+                                      <Component id="addItem" max="32767" attributes="0"/>
                                   </Group>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="listPurchasedButton" alignment="1" max="32767" attributes="0"/>
-                                      <Component id="listRemoveButton" alignment="1" max="32767" attributes="0"/>
+                                      <Component id="removeItem" alignment="1" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -210,7 +210,7 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="listDateLabel" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="webDateField2" min="-2" pref="135" max="-2" attributes="0"/>
+                                      <Component id="dateField" min="-2" pref="135" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
@@ -232,7 +232,7 @@
                           <Component id="listNameField" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="listNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="listDateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="webDateField2" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="dateField" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -244,13 +244,13 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="listScrollPane" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
-                              <Component id="listAddButton" min="-2" max="-2" attributes="0"/>
+                              <Component id="addItem" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="listEditButton" min="-2" max="-2" attributes="0"/>
+                              <Component id="updateItem" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="listPurchasedButton" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="listRemoveButton" min="-2" max="-2" attributes="0"/>
+                              <Component id="removeItem" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -312,24 +312,33 @@
                     <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="new ItemListModel(shoppingList)" type="code"/>
                     </Property>
+                    <Property name="cellRenderer" type="javax.swing.ListCellRenderer" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+                      <Connection code="new ItemListCellRenderer()" type="code"/>
+                    </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="itemListMouseClicked"/>
+                  </Events>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
                   </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
-            <Component class="javax.swing.JButton" name="listAddButton">
+            <Component class="javax.swing.JButton" name="addItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Prida&#x165;..."/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="addItemActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="listEditButton">
+            <Component class="javax.swing.JButton" name="updateItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Upravi&#x165;..."/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="listEditButtonActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="updateItemActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="listPurchasedButton">
@@ -337,15 +346,18 @@
                 <Property name="text" type="java.lang.String" value="K&#xfa;pen&#xe9;"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="listPurchasedButtonActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="listPurchasedButtonActionPerformed2"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="listRemoveButton">
+            <Component class="javax.swing.JButton" name="removeItem">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Odstr&#xe1;ni&#x165;"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="removeItemActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="com.alee.extended.date.WebDateField" name="webDateField2">
+            <Component class="com.alee.extended.date.WebDateField" name="dateField">
             </Component>
             <Component class="javax.swing.JButton" name="addListButton">
               <Properties>

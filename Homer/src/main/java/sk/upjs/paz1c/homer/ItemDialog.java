@@ -17,7 +17,7 @@ import sk.upjs.paz1c.homer.model.ItemListModel;
  */
 public class ItemDialog extends javax.swing.JDialog {
 
-    private Item item;
+    private Item item = new Item();
     private ShoppingList shoppingList = new ShoppingList();
     private final ItemDao itemDao = ObjectFactory.INSTANCE.getDao(Item.class);
     private final ProductDao productDao = ObjectFactory.INSTANCE.getDao(Product.class);
@@ -39,6 +39,7 @@ public class ItemDialog extends javax.swing.JDialog {
         this.item = item;
         this.item.setListId(shoppingList.getId());
         itemNameTextField.setText(item.getName());
+        this.item.setListId(shoppingList.getId());
         this.shoppingList=shoppingList;
 
     }
@@ -50,6 +51,7 @@ public class ItemDialog extends javax.swing.JDialog {
         this.item = new Item();
         this.item.setListId(shoppingList.getId());
         itemNameTextField.setText(item.getName());
+        this.shoppingList=shoppingList;
     }
 
     /**
@@ -142,10 +144,11 @@ public class ItemDialog extends javax.swing.JDialog {
         itemNameTextField.setBackground(Color.white);
         String string = itemNameTextField.getText();
 
-        if (item != null) {
+        if (item.getName() != null) {
             //update item
             item.setName(string);
-            item.setAmount((float)amountSpinner.getValue());
+            String amount = (""+ amountSpinner.getValue());
+                item.setAmount((Float.parseFloat(amount)));
             itemDao.store(item);
             this.dispose();
             
@@ -160,10 +163,8 @@ public class ItemDialog extends javax.swing.JDialog {
             }
             if (!(products.isEmpty())) {
                 //add product to list as item
-                item = new Item();
                 item.setProduct_id(products.get(0).getId());
                 item.setName(string);
-                item.setListId(shoppingList.getId());
                 String amount = (""+ amountSpinner.getValue());
                 item.setAmount((Float.parseFloat(amount)));
                 itemDao.store(item);

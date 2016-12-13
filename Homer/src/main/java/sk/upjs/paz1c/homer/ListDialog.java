@@ -23,7 +23,7 @@ import sk.upjs.paz1c.homer.model.ListComboBoxModel;
  */
 public class ListDialog extends javax.swing.JDialog {
 
-    private Product product;
+    private Product product = new Product();
     private ShoppingListDao shoppingListDao = ObjectFactory.INSTANCE.getDao(ShoppingList.class);
     private ProductDao productDao = ObjectFactory.INSTANCE.getDao(Product.class);
     private ItemDao itemDao = ObjectFactory.INSTANCE.getDao(Item.class);
