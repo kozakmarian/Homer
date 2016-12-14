@@ -17,7 +17,6 @@ import javax.swing.ListModel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,8 +82,9 @@ public class MainFrame extends javax.swing.JFrame {
         
         initComponents();
         
+        itemList.setFixedCellHeight(26);
+        
         recipeTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
         recipeTable.setRowHeight(40);
         int[] widths = {69, 300, 100, 120, 120};
         TableColumnModel columnModel = recipeTable.getColumnModel();

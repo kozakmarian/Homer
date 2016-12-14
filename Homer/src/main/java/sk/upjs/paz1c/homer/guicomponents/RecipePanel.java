@@ -65,8 +65,6 @@ public class RecipePanel extends JPanel {
     private void setComponentContents() {
         recipeNameLabel.setText(recipe.getName());
         
-        recipeItemList = new WebList(new RecipeItemListModel(recipe));
-        
         instructions.setText(
                 Arrays.stream(recipe.getInstructions().split("\n"))
                         .map(i -> "<li>" + i + "</li>")
@@ -95,6 +93,9 @@ public class RecipePanel extends JPanel {
         } catch (IOException e) {
             System.err.println("Failed to load: " + recipe.getImage());
         }
+        recipeItemList = new WebList(new RecipeItemListModel(recipe));
+        recipeItemList.setFixedCellHeight(26);
+        
         instructionsScrollPane = new WebScrollPane(instructions);
         recipeNameLabel.setFont(new Font("Sans Serif", Font.BOLD, 18));
         

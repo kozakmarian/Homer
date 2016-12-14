@@ -18,7 +18,7 @@ public class ItemListCellRenderer extends JLabel implements ListCellRenderer<Ite
 
     @Override
     public Component getListCellRendererComponent(JList<? extends Item> list, Item value, int index, boolean isSelected, boolean cellHasFocus) {
-        setFont(new Font(Font.MONOSPACED, Font.PLAIN, 16));
+        setFont(new Font(Font.MONOSPACED, Font.PLAIN, 14));
         String amount = new DecimalFormat("#.##").format(value.getAmount());
         String unit = "";
         if(value.getStatus() == Status.DONE) {
