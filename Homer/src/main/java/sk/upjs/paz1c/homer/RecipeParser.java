@@ -17,7 +17,10 @@ import sk.upjs.paz1c.homer.entity.Recipe;
 import static java.nio.charset.StandardCharsets.*;
 
 /**
- *
+ * Uses JSoup library (MIT)
+ * @see https://jsoup.org/
+ * @see https://jsoup.org/license
+ * 
  * @author dyske
  */
 public class RecipeParser {
@@ -28,9 +31,6 @@ public class RecipeParser {
      * protocol. Method inserts all the data into database using available DAOs.
      * Warning: this method is parsing and processing a lot of text and it is not
      * a good idea to run it on a batch of urls.
-     * 
-     * Uses library JSoup for HTML parsing.
-     * @see https://jsoup.org/
      * 
      * @param url       URL to parse content from.
      * @throws IOException  Thrown when URL is malformed/unavailable

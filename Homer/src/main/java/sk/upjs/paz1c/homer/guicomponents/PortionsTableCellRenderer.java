@@ -15,13 +15,18 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @author dyske
  */
 public class PortionsTableCellRenderer extends DefaultTableCellRenderer {
-    
+
     @Override
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+        return this.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column, false);
+    }
+    
     public Component getTableCellRendererComponent(JTable table, Object value,
                                                    boolean isSelected,
                                                    boolean hasFocus,
                                                    int row,
-                                                   int column
+                                                   int column,
+                                                   boolean reverse
     ) {
         Integer portions = (Integer) value;
         int[] circles = new int[2];
@@ -31,10 +36,10 @@ public class PortionsTableCellRenderer extends DefaultTableCellRenderer {
             i-=1; circles[0]++;
         }
 
-        BufferedImage bi = new BufferedImage(100, 40, BufferedImage.TYPE_INT_RGB);
+        BufferedImage bi = new BufferedImage(100, 40, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = (Graphics2D) bi.getGraphics();
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setColor(Color.white);
+        g.setColor(new Color(1f, 1f, 1f, 0));
         g.fillRect(0, 0, 100, 40);
         
         for (int j = 0; j < 5; j++) {
@@ -42,7 +47,7 @@ public class PortionsTableCellRenderer extends DefaultTableCellRenderer {
             if (circles[1] != 0) circles[1]--;
             else if (circles[0] != 0) circles[0]--;
             else break;
-            int x = 10 + j * 20, y = 20;
+            int x = ((reverse) ? (90 - j * 20) :(10 + j * 20)), y = 20;
             g.setPaint(new RadialGradientPaint(x, y, size, new float[]{0f, 1f}, new Color[]{Color.white, Color.darkGray}));
             circle(g, x, y, size);
         }

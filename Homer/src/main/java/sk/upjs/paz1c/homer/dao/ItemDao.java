@@ -39,4 +39,6 @@ public interface ItemDao extends GenericDao<Item>{
      *              {@link Status#DONE}
      */
     void                 done(Item item);
+
+    public List<Item> findAllByProductName(String name);
 }

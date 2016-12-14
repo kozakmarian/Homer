@@ -13,5 +13,4 @@ public class ListComboBoxModel extends GenericComboBoxModel<ShoppingList> {
         super(ObjectFactory.INSTANCE.getDao(ShoppingList.class));
         refresh();
     }
-
 }

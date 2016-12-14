@@ -32,8 +32,20 @@ public class MysqlItemDao extends MysqlGenericDao<Item> implements ItemDao {
     public List<Item> findAll(Recipe recipe) {
         Object[] params = {recipe.getId()};
         return jdbcTemplate.query(
-                "SELECT i.*, p.name FROM items AS i LEFT JOIN "
+                "SELECT i.*, p.name FROM " + TABLE_NAME + " AS i LEFT JOIN "
                 + MysqlProductDao.TABLE_NAME + " AS p ON i.product_id = p.id WHERE i.recipe_id = ?;", params, rowMapper);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @param name
+     */
+    @Override
+    public List<Item> findAllByProductName(String name) {
+        Object[] params = {name};
+        return jdbcTemplate.query(
+                "SELECT i.*, p.name FROM " + TABLE_NAME + " AS i LEFT JOIN "
+                + MysqlProductDao.TABLE_NAME + " AS p ON i.product_id = p.id WHERE p.name = ?;", params, rowMapper);
     }
 
     /**

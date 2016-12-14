@@ -16,13 +16,12 @@ public class RecipeTableModel extends AbstractTableModel {
 
     public static final int COLUMN_INDEX_IMAGE = 0;
     public static final int COLUMN_INDEX_NAME = 1;
-    public static final int COLUMN_INDEX_PREP = 2;
-    public static final int COLUMN_INDEX_COOKING = 3;
-    public static final int COLUMN_INDEX_PORTIONS = 4;
-    public static final int COLUMN_INDEX_STATUS = 5;
-    public static final int COLUMN_COUNT = 6;
+    public static final int COLUMN_INDEX_PREP = 3;
+    public static final int COLUMN_INDEX_COOKING = 4;
+    public static final int COLUMN_INDEX_PORTIONS = 2;
+    public static final int COLUMN_COUNT = 5;
     
-    private static final String[] COLUMN_NAMES = {"", "Názov", "Príprava", "Varenie" , "Počet porcií", "Stav"};
+    private static final String[] COLUMN_NAMES = {"", "Názov", "Počet porcií", "Príprava", "Varenie"};
 
     private final RecipeDao recipeDao = ObjectFactory.INSTANCE.getDao(Recipe.class);
     private final List<Recipe> recipes = new LinkedList<>();
@@ -57,8 +56,6 @@ public class RecipeTableModel extends AbstractTableModel {
                 return recipe;
             case COLUMN_INDEX_PORTIONS:
                 return recipe.getPortions();
-            case COLUMN_INDEX_STATUS:
-                return recipe.getStatus();
             case COLUMN_INDEX_PREP:
                 return recipe.getPreparation();
             case COLUMN_INDEX_COOKING:

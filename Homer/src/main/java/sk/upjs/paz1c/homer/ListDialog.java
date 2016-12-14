@@ -9,8 +9,11 @@ import java.awt.Frame;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import javax.swing.DefaultComboBoxModel;
 import sk.upjs.paz1c.homer.dao.ItemDao;
-import sk.upjs.paz1c.homer.dao.ProductDao;
 import sk.upjs.paz1c.homer.dao.ShoppingListDao;
 import sk.upjs.paz1c.homer.entity.Item;
 import sk.upjs.paz1c.homer.entity.Product;
@@ -25,7 +28,7 @@ public class ListDialog extends javax.swing.JDialog {
 
     private Product product = new Product();
     private ShoppingListDao shoppingListDao = ObjectFactory.INSTANCE.getDao(ShoppingList.class);
-    private ProductDao productDao = ObjectFactory.INSTANCE.getDao(Product.class);
+    private List<Item> foundItems = new ArrayList<>();
     private ItemDao itemDao = ObjectFactory.INSTANCE.getDao(Item.class);
 
     /**
@@ -33,6 +36,7 @@ public class ListDialog extends javax.swing.JDialog {
      */
     public ListDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        setLocationByPlatform(true);
         initComponents();
     }
 
@@ -41,7 +45,9 @@ public class ListDialog extends javax.swing.JDialog {
         initComponents();
         this.product = product;
         productNameLabel.setText(product.getName());
-
+        foundItems = itemDao.findAllByProductName(product.getName());
+        Set<String> set = foundItems.stream().map(i -> i.getUnit()).collect(Collectors.toSet());
+        unitComboBox.setModel(new DefaultComboBoxModel<>(set.toArray(new String[set.size() - 1])));
     }
 
     /**
@@ -57,10 +63,11 @@ public class ListDialog extends javax.swing.JDialog {
         okButton = new javax.swing.JButton();
         amountSpinner = new javax.swing.JSpinner();
         jLabel1 = new javax.swing.JLabel();
-        listComboBox2 = new javax.swing.JComboBox<>();
+        listComboBox = new javax.swing.JComboBox<>();
         listTextField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         productNameLabel = new javax.swing.JLabel();
+        unitComboBox = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -75,7 +82,7 @@ public class ListDialog extends javax.swing.JDialog {
 
         jLabel1.setText("Množstvo:");
 
-        listComboBox2.setModel(new ListComboBoxModel());
+        listComboBox.setModel(new ListComboBoxModel());
 
         jLabel2.setText("Vytvoriť nový zoznam:");
 
@@ -83,6 +90,8 @@ public class ListDialog extends javax.swing.JDialog {
         productNameLabel.setText("Názov pridávanej  položky");
         productNameLabel.setToolTipText("");
         productNameLabel.setAutoscrolls(true);
+
+        unitComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -92,23 +101,24 @@ public class ListDialog extends javax.swing.JDialog {
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(productNameLabel)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(productNameLabel)
+                            .addComponent(jLabel1))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
                             .addComponent(listLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(listComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(listComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(listTextField)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(amountSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(okButton, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)))))
+                                .addComponent(amountSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(unitComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(okButton, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -119,7 +129,7 @@ public class ListDialog extends javax.swing.JDialog {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(listLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(listComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(listComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(listTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -128,7 +138,8 @@ public class ListDialog extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(amountSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(okButton)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel1)
+                    .addComponent(unitComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
@@ -141,84 +152,37 @@ public class ListDialog extends javax.swing.JDialog {
         if (!(listTextField.getText().equals(""))) {
             shoppingList = new ShoppingList();
             shoppingList.setName(listTextField.getText());
-            shoppingList.setList(new ArrayList<Item>());
+            shoppingList.setList(new ArrayList<>());
             Timestamp stamp = new Timestamp(System.currentTimeMillis());
             Date date = new Date(stamp.getTime());
             shoppingList.setExpiry(date);
             shoppingListDao.store(shoppingList);
-
         } else {
-            shoppingList = (ShoppingList) listComboBox2.getSelectedItem();
-
+            shoppingList = (ShoppingList) listComboBox.getSelectedItem();
         }
+        
         Item item = new Item();
         item.setProduct_id(product.getId());
         item.setListId(shoppingList.getId());
-        //set unit ???
-        String amount = (""+ amountSpinner.getValue());
-                item.setAmount((Float.parseFloat(amount)));
+        
+        String amount = (amountSpinner.getValue().toString());
+        item.setAmount(Float.parseFloat(amount));
+        item.setUnit((String) unitComboBox.getSelectedItem());
 
         itemDao.store(item);
         this.dispose();
     }//GEN-LAST:event_okButtonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ListDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ListDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ListDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ListDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ListDialog dialog = new ListDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSpinner amountSpinner;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JComboBox<ShoppingList> listComboBox2;
+    private javax.swing.JComboBox<ShoppingList> listComboBox;
     private javax.swing.JLabel listLabel;
     private javax.swing.JTextField listTextField;
     private javax.swing.JButton okButton;
     private javax.swing.JLabel productNameLabel;
+    private javax.swing.JComboBox<String> unitComboBox;
     // End of variables declaration//GEN-END:variables
 }

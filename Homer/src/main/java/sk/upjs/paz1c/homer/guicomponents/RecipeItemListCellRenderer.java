@@ -21,12 +21,12 @@ public class RecipeItemListCellRenderer extends WebLabel implements ListCellRend
                                                   boolean isSelected,
                                                   boolean cellHasFocus
     ) {
-        setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 13));
+        setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
         String amount = new DecimalFormat("#.##").format(value.getAmount());
+        String compound = amount + " " + value.getUnit();
         setText(
-                String.format(" %1$-" + (40 - amount.length()) + "s %2$s",
-                        amount
-                        + " " + value.getUnit(), value.getName())
+                String.format(" %1$-15s %2$s",
+                        compound, value.getName())
         );
         return this;
     }

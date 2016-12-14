@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package sk.upjs.paz1c.homer.guicomponents;
 
 import java.awt.Color;
@@ -23,21 +18,23 @@ public class ItemListCellRenderer extends JLabel implements ListCellRenderer<Ite
 
     @Override
     public Component getListCellRendererComponent(JList<? extends Item> list, Item value, int index, boolean isSelected, boolean cellHasFocus) {
-          
-           setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 16));
+        setFont(new Font(Font.MONOSPACED, Font.PLAIN, 16));
         String amount = new DecimalFormat("#.##").format(value.getAmount());
-        String unit ="";
-        if(value.getStatus()==Status.DONE){
-            setBackground(Color.green); 
-            
+        String unit = "";
+        if(value.getStatus() == Status.DONE) {
+            setBackground(Color.green);
         }
-        if (value.getUnit()!=null) {
-            unit = value.getUnit();
-            
+        
+        if (value.getUnit() != null) {
+            unit = value.getUnit();   
         }
+        
         setText(
-                String.format("* "+value.getName() + "              " + value.getAmount()+""+ unit+"    "
-           )) ;
+            String.format(" %1$-40s %2$s",
+                    amount + " " + unit,
+                    value.getName()
+            )
+        );
            return this;
     }
     

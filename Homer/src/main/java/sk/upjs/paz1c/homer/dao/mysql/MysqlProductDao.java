@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.jdbc.core.JdbcTemplate;
 import sk.upjs.paz1c.homer.dao.ProductDao;
 import sk.upjs.paz1c.homer.entity.Product;
-import sk.upjs.paz1c.homer.entity.Recipe;
 
 /**
  *
@@ -33,8 +32,8 @@ public class MysqlProductDao extends MysqlGenericDao<Product> implements Product
      */
     @Override
     public List<Product> find(String name) {
-        Object[] params = {name};
-        return jdbcTemplate.query("SELECT * FROM " + TABLE_NAME + " WHERE name = ?", params, rowMapper);
+        Object[] params = {"%"+name+"%"};
+        return jdbcTemplate.query("SELECT * FROM " + TABLE_NAME + " WHERE name LIKE ?", params, rowMapper);
     }
 
     /**
@@ -48,17 +47,5 @@ public class MysqlProductDao extends MysqlGenericDao<Product> implements Product
         storeMap.put("image", product.getImage());
         storeMap.put("status", product.getStatus().toInt());
         super.store(product);
-    }
-
-    /**
-     * {@inheritDoc}
-     * @param recipe
-     * @return
-     */
-    @Override
-    public List<Product> find(Recipe recipe) {
-        throw new UnsupportedOperationException("Work in progress");
-        // @todo: select through intermediate table
-        //return jdbcTemplate.query("SELECT * FROM " + tableName + " WHERE recipe_id = " + recipe.getId(), rowMapper);
     }
 }

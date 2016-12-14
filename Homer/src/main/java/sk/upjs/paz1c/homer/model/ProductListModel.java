@@ -32,6 +32,12 @@ public class ProductListModel extends AbstractListModel<Product> {
         return product;
     }
 
+    public void refreshList() {
+        this.products.clear();
+        this.products = this.productDao.list();
+        fireIntervalAdded(this, 0, products.size());
+    }
+    
     public void refreshList(List<Product> products) {
         this.products.clear();
         this.products = products;

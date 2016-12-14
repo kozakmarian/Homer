@@ -14,15 +14,12 @@ import sk.upjs.paz1c.homer.entity.ShoppingList;
  */
 public class ItemListModel extends AbstractListModel<Item> {
 
-    private ShoppingList shoppingList = new ShoppingList();
+    private final ShoppingList shoppingList = new ShoppingList();
     private List<Item> items = new ArrayList<>();
     private final ItemDao itemDao;
 
     public ItemListModel(ShoppingList shoppingList) {
         itemDao = ObjectFactory.INSTANCE.getDao(Item.class);
-       
-        
-
     }
 
     @Override
@@ -36,14 +33,11 @@ public class ItemListModel extends AbstractListModel<Item> {
         return item;
     }
 
-    public void refresh(ShoppingList shoppingList) {
-      
+    public void refresh(ShoppingList shoppingList) {      
+        if(shoppingList == null) return;
         items.clear();
         items = itemDao.findAll(shoppingList);
         fireIntervalAdded(this, 0, items.size());
-            fireContentsChanged(this,0, items.size());
-        //refresh
-        
+        fireContentsChanged(this,0, items.size());
     }
-
 }

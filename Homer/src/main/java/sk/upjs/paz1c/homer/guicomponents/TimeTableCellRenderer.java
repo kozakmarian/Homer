@@ -22,14 +22,31 @@ public class TimeTableCellRenderer extends DefaultTableCellRenderer {
         JLabel label = new WebLabel();
         String time = value.toString();
         Integer minutes = (Integer) value;
+        if (minutes <= 0) {
+            label.setText("");
+            return label;
+        }
         if (minutes < 60) {
-            time += " minút";
+            time += " " + getLocalizedName(minutes, false);
         } else {
             int hours = (int)(minutes / 60);
             int rem = minutes % 60;
-            time = hours + "h " + ((rem != 0) ? rem + " min" : "");
+            time = hours + " " + getLocalizedName(hours, true);
+            time += (rem != 0) ? " a " + rem +  " " + getLocalizedName(rem, false) : "";
         }
         label.setText(time);
         return label;
+    }
+    
+    private String getLocalizedName(int value, boolean isHours) {
+        if (isHours) {
+            if (value == 1) return "hodina";
+            if (value < 5) return "hodiny";
+            return "hodín";
+        } else {
+            if (value == 1) return "minúta";
+            if (value < 5) return "minúty";
+        }
+        return "minút";
     }
 }

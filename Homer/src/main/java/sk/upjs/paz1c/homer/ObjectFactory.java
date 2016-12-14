@@ -10,6 +10,11 @@ import java.util.logging.Logger;
 import sk.upjs.paz1c.homer.dao.mysql.MysqlGenericDao;
 import sk.upjs.paz1c.homer.entity.Entity;
 
+/**
+ * Uses Java Reflection API
+ * @see https://docs.oracle.com/javase/7/docs/api/java/lang/reflect/package-summary.html
+ * @author dyske
+ */
 public enum ObjectFactory {
 
     INSTANCE;
@@ -57,7 +62,7 @@ public enum ObjectFactory {
 
     public JdbcTemplate getJdbcTemplate() {
         MysqlDataSource dataSource = new MysqlDataSource();
-        dataSource.setUrl("jdbc:mysql://cfftw.ddns.net/homer?characterEncoding=utf8");
+        dataSource.setUrl("jdbc:mysql://cfftw.ddns.net/homer_all?characterEncoding=utf8");
         dataSource.setUser("homer");
         dataSource.setPort(3306);
         dataSource.setPassword("plate-watch-window");

@@ -1,6 +1,5 @@
 package sk.upjs.paz1c.homer.guicomponents;
 
-import sk.upjs.paz1c.homer.guicomponents.RecipeItemListCellRenderer;
 import com.alee.extended.image.DisplayType;
 import com.alee.extended.image.WebImage;
 import com.alee.laf.label.WebLabel;
@@ -38,29 +37,33 @@ public class RecipePanel extends JPanel {
     private final JLabel instructionsLabel = new WebLabel("Postup:");
     private final JLabel portionsLabel = new WebLabel("Počet porcií: ");
     private final JLabel preparationLabel = new  WebLabel("Príprava: ");
-    private final JLabel cookingDurationLabel = new WebLabel();
-    private final JLabel preparationDurationLabel = new WebLabel();
-    private final JLabel portionsCountLabel = new WebLabel();
     private final JLabel recipeNameLabel = new WebLabel();
     private final JLabel instructions = new WebLabel();
-    private JList recipeItemList = new WebList();
+    private JList recipeItemList = new JList();
+    private final WebImage portionsCountLabel;
+    private final JLabel cookingDurationLabel;
+    private final JLabel preparationDurationLabel;
     private WebImage recipeImage;
     private JScrollPane recipeItemListScrollPane;
     private JScrollPane instructionsScrollPane;
-   
     private final Recipe recipe;
     
     public RecipePanel(Recipe recipe) {
         this.recipe  = recipe;
+        
+        this.preparationDurationLabel = (JLabel) new TimeTableCellRenderer()
+                .getTableCellRendererComponent(null, recipe.getPreparation(), false, false, 0, 0);
+        this.cookingDurationLabel = (JLabel) new TimeTableCellRenderer()
+                .getTableCellRendererComponent(null, recipe.getCooking(), false, false, 0, 0);
+        this.portionsCountLabel = (WebImage) new PortionsTableCellRenderer()
+                .getTableCellRendererComponent(null, recipe.getPortions(), false, false, 0, 0, true);
+        this.portionsCountLabel.setMaximumSize(new Dimension(100, 40));
         this.initComponents();
         this.setComponentContents();
     }
 
     private void setComponentContents() {
         recipeNameLabel.setText(recipe.getName());
-        portionsCountLabel.setText(recipe.getPortions().toString());
-        preparationDurationLabel.setText(recipe.getPreparation().toString());
-        cookingDurationLabel.setText(recipe.getCooking().toString());
         
         recipeItemList = new WebList(new RecipeItemListModel(recipe));
         
@@ -81,7 +84,7 @@ public class RecipePanel extends JPanel {
         recipeImage.setDisplayType(DisplayType.fitComponent);
         recipeImage.setPreferredSize(imagePanel.getMaximumSize());
     }
-
+    
     private void initComponents() {
         try {
             File f = FileStorage.getFile(
@@ -116,6 +119,7 @@ public class RecipePanel extends JPanel {
         instructionsScrollPane.setViewportView(instructions);
 
         recipeItemList.setModel(new RecipeItemListModel(recipe));
+        
         recipeItemList.setCellRenderer(new RecipeItemListCellRenderer());
         
         recipeItemListScrollPane.setViewportView(recipeItemList);
@@ -179,7 +183,7 @@ public class RecipePanel extends JPanel {
                 .addContainerGap()
                 .addComponent(recipeNameLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(portionsLabel)
                     .addComponent(portionsCountLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
