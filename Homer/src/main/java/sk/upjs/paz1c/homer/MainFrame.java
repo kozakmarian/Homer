@@ -62,11 +62,13 @@ public class MainFrame extends javax.swing.JFrame {
     private ItemListCellRenderer itemListCellRenderer = new ItemListCellRenderer();
 
     private Image iconImage = null;
+    private int pravo = 0;
     
     /**
      * Creates new form MainFrame
      */
-    public MainFrame() {
+    public MainFrame(int pravo) {
+        this.pravo = pravo;
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         int width = gd.getDisplayMode().getWidth() * 2 / 3;
         int height = gd.getDisplayMode().getHeight() * 2 / 2;
@@ -190,12 +192,13 @@ public class MainFrame extends javax.swing.JFrame {
         addRecipeLabel = new javax.swing.JLabel();
         recipeUrlTextField = new javax.swing.JTextField();
         addRecipeButton = new javax.swing.JButton();
+        novyPouzivatelButton = new javax.swing.JButton();
+        odhlasitButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Homer");
         setLocationByPlatform(true);
         setMinimumSize(new java.awt.Dimension(500, 350));
-        setPreferredSize(windowSize);
         setSize(windowSize);
 
         tabbedPane.setTabPlacement(javax.swing.JTabbedPane.LEFT);
@@ -254,7 +257,7 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(searchProductField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(productScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 456, Short.MAX_VALUE)
+                .addComponent(productScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -479,20 +482,46 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(recipeUrlTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addRecipeButton))
                 .addGap(25, 25, 25)
-                .addComponent(recipeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE))
+                .addComponent(recipeScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE))
         );
 
         tabbedPane.addTab("Recepty", recipePanel);
+
+        novyPouzivatelButton.setText("Nový používateľ");
+        novyPouzivatelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                novyPouzivatelButtonActionPerformed(evt);
+            }
+        });
+
+        odhlasitButton.setText("Odhlásiť");
+        odhlasitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                odhlasitButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(58, 58, 58)
+                .addComponent(novyPouzivatelButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(odhlasitButton)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(tabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(tabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(novyPouzivatelButton)
+                    .addComponent(odhlasitButton))
+                .addGap(0, 11, Short.MAX_VALUE))
         );
 
         pack();
@@ -527,13 +556,14 @@ public class MainFrame extends javax.swing.JFrame {
     }                                                   
 
     private void updateItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateItemActionPerformed
-        // TODO add your handling code here:
-        Item item = getSelectedItem();
-        ItemDialog productDialog;
-        shoppingList = addSelectedList();
-        productDialog = new ItemDialog(item, shoppingList, this, true);
-        productDialog.setVisible(true);
-        refreshItems();
+        if (pravo == 1){
+            Item item = getSelectedItem();
+            ItemDialog productDialog;
+            shoppingList = addSelectedList();
+            productDialog = new ItemDialog(item, shoppingList, this, true);
+            productDialog.setVisible(true);
+            refreshItems();
+        }
     }//GEN-LAST:event_updateItemActionPerformed
 
     
@@ -544,12 +574,14 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void addRecipeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRecipeButtonActionPerformed
-        try {
-            RecipeParser.fetchFromUrl(recipeUrlTextField.getText());
-            ((RecipeTableModel) recipeTable.getModel()).refresh();
-        } catch (IOException | UnsupportedOperationException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        if (pravo == 1){
+            try {
+                RecipeParser.fetchFromUrl(recipeUrlTextField.getText());
+                ((RecipeTableModel) recipeTable.getModel()).refresh();
+            } catch (IOException | UnsupportedOperationException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }    
     }//GEN-LAST:event_addRecipeButtonActionPerformed
 
     private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
@@ -631,33 +663,34 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_searchFieldKeyPressed
 
     private void listPurchasedButtonActionPerformed2(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listPurchasedButtonActionPerformed2
-        // TODO add your handling code here
-        ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
-        ItemListModel model = (ItemListModel) itemList.getModel();
-        model.refresh(shoppingList);
+        if (pravo == 1){
+            ShoppingList shoppingList = (ShoppingList) listComboBox.getSelectedItem();
+            ItemListModel model = (ItemListModel) itemList.getModel();
+            model.refresh(shoppingList);
 
-        Item item = getSelectedItem();
-        item.setStatus(Status.DONE);
-        refreshItems();
+            Item item = getSelectedItem();
+            item.setStatus(Status.DONE);
+            refreshItems();
+        }    
     }//GEN-LAST:event_listPurchasedButtonActionPerformed2
 
     private void removeItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeItemActionPerformed
-        // TODO add your handling code here:
-         Item item = getSelectedItem();
-        itemDao.delete(item);
-        refreshItems();
-        
+        if (pravo == 1){
+            Item item = getSelectedItem();
+            itemDao.delete(item);
+            refreshItems();
+        }
     }//GEN-LAST:event_removeItemActionPerformed
 
     private void addItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemActionPerformed
-        // TODO add your handling code here:
-         // TODO add your handling code here:
-        ItemDialog productDialog;
+        if (pravo == 1){
+            ItemDialog productDialog;
 
-        shoppingList = addSelectedList();
-        productDialog = new ItemDialog(shoppingList, this, true);
-        productDialog.setVisible(true);
-        refreshItems();
+            shoppingList = addSelectedList();
+            productDialog = new ItemDialog(shoppingList, this, true);
+            productDialog.setVisible(true);
+            refreshItems();
+        }    
     }//GEN-LAST:event_addItemActionPerformed
 
     private void itemListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_itemListMouseClicked
@@ -666,21 +699,37 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_itemListMouseClicked
 
     private void addListButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addListButtonActionPerformed
-        ShoppingList shoppingList;
-        if (listNameField.getText() != null) {
-            shoppingList = new ShoppingList();
-            shoppingList.setName(listNameField.getText());
-            shoppingList.setExpiry(dateField.getDate());
-            shoppingListDao.store(shoppingList);
-            listNameField.setText("");
-            dateField.setText("");
-            refreshComboBox();
+        if (pravo == 1){
+            ShoppingList shoppingList;
+            if (listNameField.getText() != null) {
+                shoppingList = new ShoppingList();
+                shoppingList.setName(listNameField.getText());
+                shoppingList.setExpiry(dateField.getDate());
+                shoppingListDao.store(shoppingList);
+                listNameField.setText("");
+                dateField.setText("");
+                refreshComboBox();
+            }
         }
     }//GEN-LAST:event_addListButtonActionPerformed
 
     private void searchProductFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchProductFieldKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) this.loadProducts();
     }//GEN-LAST:event_searchProductFieldKeyReleased
+
+    private void odhlasitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_odhlasitButtonActionPerformed
+            this.dispose();
+            PrihlasenieForm prihlasenieForm = new PrihlasenieForm();
+            prihlasenieForm.setVisible(true);
+        
+    }//GEN-LAST:event_odhlasitButtonActionPerformed
+
+    private void novyPouzivatelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novyPouzivatelButtonActionPerformed
+        if (pravo == 1){
+            NewUserDialog newUserDialog = new NewUserDialog(this, true);
+            newUserDialog.setVisible(true);
+        }
+    }//GEN-LAST:event_novyPouzivatelButtonActionPerformed
 
     public void loadProducts () {
         searchProductField.setBackground(Color.white);
@@ -701,15 +750,14 @@ public class MainFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        WebLookAndFeel.install();
+    //public static void main(String args[]) {
+        //WebLookAndFeel.install();
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new MainFrame().setVisible(true);
-        });
-    }
+        //java.awt.EventQueue.invokeLater(() -> {
+           //new MainFrame().setVisible(true);
+       // });
+    //}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addItem;
@@ -728,6 +776,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JScrollPane listScrollPane;
     private javax.swing.JLabel listStatusLabel;
     private javax.swing.JPanel listsPanel;
+    private javax.swing.JButton novyPouzivatelButton;
+    private javax.swing.JButton odhlasitButton;
     private javax.swing.JList<Product> productList;
     private javax.swing.JPanel productPanel;
     private javax.swing.JScrollPane productScrollPane;

@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sk.upjs.paz1c.homer.dao.UserDao;
 import sk.upjs.paz1c.homer.dao.mysql.MysqlGenericDao;
+import sk.upjs.paz1c.homer.dao.mysql.MysqlUserDao;
 import sk.upjs.paz1c.homer.entity.Entity;
 
 /**
@@ -22,6 +24,7 @@ public enum ObjectFactory {
     private final Map<String, MysqlGenericDao> cache = new HashMap<>();
     
     private JdbcTemplate jdbcTemplate;
+    private UserDao userDao;
 
     /**
      * Rýchle objasnenie tejto metódy:
@@ -62,12 +65,19 @@ public enum ObjectFactory {
 
     public JdbcTemplate getJdbcTemplate() {
         MysqlDataSource dataSource = new MysqlDataSource();
-        dataSource.setUrl("jdbc:mysql://cfftw.ddns.net/homer_all?characterEncoding=utf8");
+        dataSource.setUrl("jdbc:mysql://localhost/homer?serverTimezone=UTC");
         dataSource.setUser("homer");
         dataSource.setPort(3306);
         dataSource.setPassword("plate-watch-window");
         jdbcTemplate = new JdbcTemplate(dataSource);
         return this.jdbcTemplate;
+    }
+    
+    public UserDao getUserDao(){
+        if(userDao == null){
+            userDao = new MysqlUserDao(getJdbcTemplate());
+        }
+        return userDao;
     }
 
 }
